@@ -6,10 +6,12 @@ class TimeLine extends StatelessWidget {
     @required this.offsetTop,
     @required this.timelineColumnWidth,
     @required this.horizontalIndent,
+    this.color,
   }) : super(key: key);
   final double offsetTop;
   final double timelineColumnWidth;
   final double horizontalIndent;
+  final Color color;
 
   @override
   Widget build(BuildContext context) {
@@ -37,14 +39,14 @@ class TimeLine extends StatelessWidget {
             width: 8,
             height: 8,
             decoration: BoxDecoration(
-              color: Colors.blue[400],
+              color: color ?? Colors.blue[400],
               borderRadius: BorderRadius.circular(8),
             ),
           ),
           Container(
             width: _width,
             height: 2,
-            color: Colors.blue[400],
+            color: color ?? Colors.blue[400],
           ),
         ],
       ),

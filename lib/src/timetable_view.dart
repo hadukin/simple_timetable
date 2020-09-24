@@ -14,23 +14,26 @@ ValueNotifier<double> _timeLinePosition = ValueNotifier(0.0);
 class SimpleTimetable extends StatefulWidget {
   SimpleTimetable({
     Key key,
+    @required this.initialDate,
+    @required this.events,
     this.cellHeight = 60,
     this.timelineColumnWidth = 50,
     this.horizontalIndent = 24,
-    this.events,
     this.buildHeader,
     this.buildCell,
     this.buildCard,
     this.onChange,
-    this.initialDate,
     this.dayStart = 8,
     this.dayEnd = 20,
     this.visibleRange = 7,
-    this.currentDate,
+    this.colorTimeline,
   })  : assert(initialDate != null),
         assert(dayStart < dayEnd),
         assert(dayEnd > dayStart),
+        assert(dayStart >= 0 && dayStart <= 23),
+        assert(dayEnd > 0 && dayEnd <= 24),
         super(key: key);
+  final Color colorTimeline;
   final List<Event> events;
   final double cellHeight;
   final double timelineColumnWidth;
@@ -39,7 +42,6 @@ class SimpleTimetable extends StatefulWidget {
   final int dayStart;
   final int dayEnd;
   final DateTime initialDate;
-  final Function(DateTime date) currentDate;
   final Function(DateTime date, TimetableDirection dir) onChange;
   final Widget Function(Event event, bool isPast) buildCard;
   final Widget Function(bool isFirstColumn, bool isLastColumn) buildCell;
@@ -362,6 +364,7 @@ class SimpleTimetableState extends State<SimpleTimetable> {
                           Widget child,
                         ) =>
                             TimeLine(
+                          color: widget.colorTimeline,
                           offsetTop: _timeLinePosition.value,
                           timelineColumnWidth: widget.timelineColumnWidth,
                           horizontalIndent: widget.horizontalIndent,
