@@ -2,7 +2,7 @@
   "events": [
     {
       "startDate": "2020-09-24T00:00:00Z",
-      "payload": {
+      "data": {
         "eventDate": "2020-09-24T00:00:00Z",
         "eventStart": "2020-09-24T10:00:00Z",
         "eventEnd": "2020-09-24T10:45:00Z",
@@ -11,7 +11,7 @@
     },
     {
       "startDate": "2020-09-24T00:00:00Z",
-      "payload": {
+      "data": {
         "eventDate": "2020-09-24T00:00:00Z",
         "eventStart": "2020-09-24T10:30:00Z",
         "eventEnd": "2020-09-24T11:15:00Z",
@@ -20,7 +20,7 @@
     },
     {
       "startDate": "2020-09-25T00:00:00Z",
-      "payload": {
+      "data": {
         "eventDate": "2020-09-25T00:00:00Z",
         "eventStart": "2020-09-25T10:00:00Z",
         "eventEnd": "2020-09-25T11:00:00Z",

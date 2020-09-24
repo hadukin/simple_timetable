@@ -1,10 +1,10 @@
 import 'dart:convert';
+import 'package:example/models/event.dart';
 import 'package:example/models/table_query.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:simple_timetable/simple_timetable.dart';
 import 'package:intl/intl.dart';
-import 'models/event.dart';
 import 'package:dart_date/dart_date.dart';
 
 void main() {
@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Simple timetable',
       theme: ThemeData(
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
@@ -33,11 +33,9 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  DateTime month = DateTime.now();
-  List<Event<TimeTableEvent>> _arrayEvents = [];
-  List<DateTime> _datesList = [];
-  bool _isLoading = false;
+  DateTime _month = DateTime.now();
   DateTime _initDate = DateTime.now();
+  List<Event<TimeTableEvent>> _events = [];
 
   @override
   void initState() {
@@ -56,39 +54,18 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void getData(TableQuery query) async {
-    if (!_isLoading) {
-      List<DateTime> _newDates = getDatesList(
-        start: query.start,
-        end: query.end,
-      );
-
-      List<TimeTableEvent> _listEvents = await _getTimetable(query.params);
-      // List<Event<TimeTableEvent>> _arr = eventCreator(_listEvents);
-      List<Event<TimeTableEvent>> _arr = _listEvents
-          .map(
-            (item) => Event<TimeTableEvent>(
+    List<TimeTableEvent> data = await _getTimetable(query.params);
+    List<Event<TimeTableEvent>> _data = data
+        .map((item) => Event<TimeTableEvent>(
               date: item.startDate,
-              start: Date.parse(item.payload.eventStart),
-              end: Date.parse(item.payload.eventEnd),
+              start: Date.parse(item.data.eventStart),
+              end: Date.parse(item.data.eventEnd),
               payload: item,
-            ),
-          )
-          .toList();
-
-      setState(() {
-        _arrayEvents.addAll(_arr);
-        _datesList.addAll(_newDates);
-      });
-    }
-  }
-
-  List<DateTime> getDatesList({DateTime start, DateTime end}) {
-    DateTime _start = start ?? DateTime.now();
-    DateTime _end = end ?? _start.addWeeks(1);
-    int _diff = _start.differenceInDays(_end).abs() + 1;
-    List<DateTime> _list = List.generate(
-        _diff, (index) => (_start + Duration(days: index)).startOfDay);
-    return _list;
+            ))
+        .toList();
+    setState(() {
+      _events.addAll(_data);
+    });
   }
 
   TableQuery getQuery({DateTime start, DateTime end}) {
@@ -107,37 +84,16 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  final List<Event> _events = [
-    Event(
-      date: Date.parse("2020-09-24T00:00:00Z"),
-      start: Date.parse("2020-09-24T10:00:00Z"),
-      end: Date.parse("2020-09-24T10:45:00Z"),
-    ),
-    Event(
-      date: Date.parse("2020-09-24T00:00:00Z"),
-      start: Date.parse("2020-09-24T10:30:00Z"),
-      end: Date.parse("2020-09-24T11:15:00Z"),
-    ),
-    Event(
-      date: Date.parse("2020-09-25T00:00:00Z"),
-      start: Date.parse("2020-09-25T10:00:00Z"),
-      end: Date.parse("2020-09-25T11:00:00Z"),
-    ),
-  ];
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(month != null ? '$month' : ''),
-      ),
-      drawer: Drawer(),
+      appBar: AppBar(title: Text(_month != null ? '$_month' : '')),
       body: SimpleTimetable(
         onChange: (DateTime date, TimetableDirection dir) {
           print('On change date: $date');
           print('On change direction: $dir');
           setState(() {
-            month = date;
+            _month = date;
           });
         },
         initialDate: _initDate.startOfDay,
@@ -146,11 +102,13 @@ class _MyHomePageState extends State<MyHomePage> {
         events: _events,
         buildCard: (Event event, bool isPast) {
           return GestureDetector(
-            onTap: () {},
+            onTap: () {
+              print(event.payload.data.title);
+            },
             child: Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(4),
-                color: Colors.blue.withOpacity(0.3),
+                color: Colors.blue[200],
               ),
               child: Column(
                 children: [

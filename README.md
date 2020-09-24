@@ -24,28 +24,6 @@ class Event<T> {
 }
 ```
 
-##### Create list events
-
-```
-final List<Event> _events = [
-  Event(
-    date: Date.parse("2020-09-24T00:00:00Z"),
-    start: Date.parse("2020-09-24T10:00:00Z"),
-    end: Date.parse("2020-09-24T10:45:00Z"),
-  ),
-  Event(
-    date: Date.parse("2020-09-24T00:00:00Z"),
-    start: Date.parse("2020-09-24T10:30:00Z"),
-    end: Date.parse("2020-09-24T11:15:00Z"),
-  ),
-  Event(
-    date: Date.parse("2020-09-25T00:00:00Z"),
-    start: Date.parse("2020-09-25T10:00:00Z"),
-    end: Date.parse("2020-09-25T11:00:00Z"),
-  ),
-];
-```
-
 ##### Usage
 
 ```

@@ -9,15 +9,15 @@ part of 'event.dart';
 TimeTableEvent _$TimeTableEventFromJson(Map<String, dynamic> json) {
   return TimeTableEvent(
     startDate: _fromJson(json['startDate'] as String),
-    payload: json['payload'] == null
+    data: json['data'] == null
         ? null
-        : EventPayload.fromJson(json['payload'] as Map<String, dynamic>),
+        : EventPayload.fromJson(json['data'] as Map<String, dynamic>),
   );
 }
 
 Map<String, dynamic> _$TimeTableEventToJson(TimeTableEvent instance) =>
     <String, dynamic>{
-      'payload': instance.payload,
+      'data': instance.data,
       'startDate': _toJson(instance.startDate),
     };
 

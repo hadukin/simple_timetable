@@ -5,14 +5,14 @@ part 'event.g.dart';
 
 @JsonSerializable()
 class TimeTableEvent {
-  final EventPayload payload;
+  final EventPayload data;
 
   @JsonKey(fromJson: _fromJson, toJson: _toJson)
   final DateTime startDate;
 
   TimeTableEvent({
     this.startDate,
-    this.payload,
+    this.data,
   });
 
   factory TimeTableEvent.fromJson(Map<String, dynamic> json) =>
