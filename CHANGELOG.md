@@ -1,3 +1,9 @@
+# 0.0.5
+
+## Docs
+
+- Update example
+
 # 0.0.4
 
 ## Fix
