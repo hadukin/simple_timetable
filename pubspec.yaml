@@ -1,0 +1,20 @@
+name: simple_timetable
+description: Simple timetable
+version: 0.0.1
+author:
+homepage:
+
+environment:
+  sdk: ">=2.7.0 <3.0.0"
+  flutter: ">=1.17.0 <2.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  dart_date: ^1.0.7
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
