@@ -1,3 +1,9 @@
+# 0.0.4
+
+## Fix
+
+- Remove unused setState
+
 # 0.0.3
 
 ## Fix
