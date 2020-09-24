@@ -1,3 +1,9 @@
+# 0.0.3
+
+## Fix
+
+- Add update state on didUpdate
+
 # 0.0.2
 
 ## Fix

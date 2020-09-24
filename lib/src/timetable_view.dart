@@ -79,6 +79,7 @@ class SimpleTimetableState extends State<SimpleTimetable> {
         },
       ).catchError((e) => print('GET GROUPS ERROR\n$e'));
     }
+    setState(() {});
   }
 
   @override

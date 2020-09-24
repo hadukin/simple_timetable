@@ -74,7 +74,6 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
           )
           .toList();
-      print(_arr[0].date);
 
       setState(() {
         _arrayEvents.addAll(_arr);
