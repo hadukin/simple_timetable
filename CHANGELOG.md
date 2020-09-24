@@ -1,3 +1,13 @@
-## [0.0.1] - TODO: Add release date.
+# 0.0.2
 
-* TODO: Describe initial release.
+## Fix
+
+- Remove unused params
+- Add required params
+- Add timeline custom color
+
+# 0.0.1
+
+## Release
+
+- 24.09.2020
