@@ -4,6 +4,8 @@ Simple timetable.
 
 ## Getting Started
 
+![screenshot2](screenshot/screenshot_1.gif)
+
 ##### Event model
 
 ```

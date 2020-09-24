@@ -1,8 +1,8 @@
 name: simple_timetable
 description: Simple timetable
 version: 0.0.1
-author:
-homepage:
+homepage: https://github.com/hadukin/simple_timetable
+repository: https://github.com/hadukin/simple_timetable
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
@@ -12,6 +12,7 @@ dependencies:
   flutter:
     sdk: flutter
   dart_date: ^1.0.7
+  intl: ^0.16.1
 
 dev_dependencies:
   flutter_test:
