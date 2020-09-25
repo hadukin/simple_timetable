@@ -11,7 +11,7 @@ import 'package:intl/intl.dart';
 
 ValueNotifier<double> _timeLinePosition = ValueNotifier(0.0);
 
-class SimpleTimetable<E> extends StatefulWidget {
+class SimpleTimetable extends StatefulWidget {
   SimpleTimetable({
     Key key,
     @required this.initialDate,
@@ -43,7 +43,7 @@ class SimpleTimetable<E> extends StatefulWidget {
   final int dayEnd;
   final DateTime initialDate;
   final Function(DateTime date, TimetableDirection dir) onChange;
-  final Widget Function(Event<E> event, bool isPast) buildCard;
+  final Widget Function(Event event, bool isPast) buildCard;
   final Widget Function(bool isFirstColumn, bool isLastColumn) buildCell;
   final Widget Function(DateTime date, bool isToday) buildHeader;
 

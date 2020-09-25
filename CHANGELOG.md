@@ -1,3 +1,9 @@
+# 0.0.7
+
+## Bug
+
+- Remove generic Event payload type
+
 # 0.0.6
 
 ## Feat
