@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
 
 class SimpleTimetableTheme {
-  final progress = Colors.blue;
+  final progress = Colors.blue[200];
 }

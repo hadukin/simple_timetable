@@ -7,11 +7,11 @@ import 'package:simple_timetable/src/event_position.dart';
 import 'package:dart_date/dart_date.dart';
 
 class EventCard extends StatefulWidget {
-  EventCard({Key key, this.position, this.event, this.cardBuilder})
+  EventCard({Key key, this.position, this.event, this.buildCard})
       : super(key: key);
   final EventPosition position;
   final Event event;
-  final cardBuilder;
+  final Widget Function(Event event, bool isPast) buildCard;
 
   @override
   _EventCardState createState() => _EventCardState();
@@ -48,7 +48,7 @@ class _EventCardState extends State<EventCard> {
           top: widget.position.top,
           left: widget.position.left,
           child: Container(
-            decoration: widget.cardBuilder == null
+            decoration: widget.buildCard == null
                 ? BoxDecoration(
                     borderRadius: BorderRadius.circular(4),
                     color: Colors.blue.withOpacity(0.3),
@@ -56,8 +56,8 @@ class _EventCardState extends State<EventCard> {
                 : null,
             height: widget.position.height,
             width: widget.position.width,
-            child: widget.cardBuilder != null
-                ? widget.cardBuilder(widget.event, _isPast)
+            child: widget.buildCard != null
+                ? widget.buildCard(widget.event, _isPast)
                 : Container(),
           ),
         );
