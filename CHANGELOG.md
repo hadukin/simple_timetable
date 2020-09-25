@@ -1,3 +1,9 @@
+# 0.0.6
+
+## Feat
+
+- Add generic Event payload type
+
 # 0.0.5
 
 ## Docs

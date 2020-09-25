@@ -8,7 +8,7 @@ List<Widget> eventsCreate({
   @required int dayStartFrom,
   @required double cellWidth,
   @required double cellHeight,
-  cardBuilder,
+  @required Widget Function(Event event, bool isPast) buildCard,
 }) {
   List<Widget> listWidgets = [];
   for (final item in events.entries) {
@@ -25,7 +25,7 @@ List<Widget> eventsCreate({
       listWidgets.add(EventCard(
         event: item.value[i],
         position: position,
-        cardBuilder: cardBuilder,
+        buildCard: buildCard,
       ));
     }
   }

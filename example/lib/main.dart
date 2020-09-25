@@ -100,7 +100,7 @@ class _MyHomePageState extends State<MyHomePage> {
         dayStart: 8,
         dayEnd: 24,
         events: _events,
-        buildCard: (Event event, bool isPast) {
+        buildCard: (Event<TimeTableEvent> event, bool isPast) {
           return GestureDetector(
             onTap: () {
               print(event.payload.data.title);
