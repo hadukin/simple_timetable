@@ -100,7 +100,7 @@ class _MyHomePageState extends State<MyHomePage> {
         dayStart: 8,
         dayEnd: 24,
         events: _events,
-        buildCard: (Event<TimeTableEvent> event, bool isPast) {
+        buildCard: (Event event, bool isPast) {
           return GestureDetector(
             onTap: () {
               print(event.payload.data.title);
@@ -108,7 +108,7 @@ class _MyHomePageState extends State<MyHomePage> {
             child: Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(4),
-                color: Colors.blue[200],
+                color: isPast ? Colors.grey[400] : Colors.blue[200],
               ),
               child: Column(
                 children: [

@@ -58,7 +58,7 @@ class _EventCardState extends State<EventCard> {
             width: widget.position.width,
             child: widget.buildCard != null
                 ? widget.buildCard(widget.event, _isPast)
-                : Container(),
+                : SizedBox.shrink(),
           ),
         );
       },
