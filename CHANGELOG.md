@@ -1,3 +1,9 @@
+# 0.0.8
+
+## Feat
+
+- Add list current columns to onChange method
+
 # 0.0.7
 
 ## Bug
