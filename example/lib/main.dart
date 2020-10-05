@@ -89,9 +89,14 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       appBar: AppBar(title: Text(_month != null ? '$_month' : '')),
       body: SimpleTimetable(
-        onChange: (DateTime date, TimetableDirection dir) {
+        onChange: (
+          DateTime date,
+          TimetableDirection dir,
+          List<DateTime> current,
+        ) {
           print('On change date: $date');
           print('On change direction: $dir');
+          print('On change columns $current');
           setState(() {
             _month = date;
           });
