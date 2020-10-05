@@ -9,8 +9,6 @@ import 'package:simple_timetable/src/timeline.dart';
 import 'package:simple_timetable/src/timetable_helper.dart';
 import 'package:intl/intl.dart';
 
-ValueNotifier<double> _timeLinePosition = ValueNotifier(0.0);
-
 class SimpleTimetable extends StatefulWidget {
   SimpleTimetable({
     Key key,
@@ -42,7 +40,11 @@ class SimpleTimetable extends StatefulWidget {
   final int dayStart;
   final int dayEnd;
   final DateTime initialDate;
-  final Function(DateTime date, TimetableDirection dir) onChange;
+  final Function(
+    DateTime date,
+    TimetableDirection dir,
+    List<DateTime> currentColumns,
+  ) onChange;
   final Widget Function(Event event, bool isPast) buildCard;
   final Widget Function(bool isFirstColumn, bool isLastColumn) buildCell;
   final Widget Function(DateTime date, bool isToday) buildHeader;
@@ -52,12 +54,13 @@ class SimpleTimetable extends StatefulWidget {
 }
 
 class SimpleTimetableState extends State<SimpleTimetable> {
+  Timer _timer;
+  double _dragDirection = 0;
   List<DateTime> _timeLine = [];
   TimetableHelper _timetableHelper;
   Map<DateTime, List<DateTime>> _columns = {};
   Map<DateTime, Map<int, List<Event>>> _groups = {};
-  Timer _timer;
-  double _dragDirection = 0;
+  ValueNotifier<double> _timeLinePosition = ValueNotifier(0.0);
 
   @override
   void didUpdateWidget(oldWidget) {
@@ -125,7 +128,8 @@ class SimpleTimetableState extends State<SimpleTimetable> {
     );
     _columns = _timetableHelper.getTable(start);
     _timeLine = _timetableHelper.getTimeLineForDay(start);
-    widget.onChange(start, dir);
+    // TODO: start will be deprecated
+    widget.onChange(start, dir, _columns.keys.toList());
     setState(() {});
   }
 
