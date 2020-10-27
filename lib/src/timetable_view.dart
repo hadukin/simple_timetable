@@ -59,7 +59,7 @@ class SimpleTimetableState extends State<SimpleTimetable> {
   List<DateTime> _timeLine = [];
   TimetableHelper _timetableHelper;
   Map<DateTime, List<DateTime>> _columns = {};
-  Map<DateTime, Map<int, List<Event>>> _groups = {};
+  Map<DateTime, List<List<Event>>> _groups = {};
   ValueNotifier<double> _timeLinePosition = ValueNotifier(0.0);
 
   @override

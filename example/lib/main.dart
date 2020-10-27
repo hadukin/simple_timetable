@@ -57,6 +57,7 @@ class _MyHomePageState extends State<MyHomePage> {
     List<TimeTableEvent> data = await _getTimetable(query.params);
     List<Event<TimeTableEvent>> _data = data
         .map((item) => Event<TimeTableEvent>(
+              id: UniqueKey().toString(),
               date: item.startDate,
               start: Date.parse(item.data.eventStart),
               end: Date.parse(item.data.eventEnd),
@@ -112,14 +113,17 @@ class _MyHomePageState extends State<MyHomePage> {
             },
             child: Container(
               decoration: BoxDecoration(
+                border: Border.all(color: Colors.black),
                 borderRadius: BorderRadius.circular(4),
-                color: isPast ? Colors.grey[400] : Colors.blue[200],
+                color: isPast
+                    ? Colors.grey[400]
+                    : Colors.blue[200].withOpacity(0.5),
               ),
               child: Column(
                 children: [
                   Text(
-                    '$isPast',
-                    maxLines: 1,
+                    '${event.start.format('hh:mm')}\n${event.end.format('hh:mm')}',
+                    style: TextStyle(fontSize: 10),
                   ),
                 ],
               ),
