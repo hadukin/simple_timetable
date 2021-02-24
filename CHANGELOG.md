@@ -1,3 +1,9 @@
+# 0.0.10
+
+## Feat
+
+- Typed event
+
 # 0.0.9
 
 ## Fix

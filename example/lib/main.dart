@@ -89,7 +89,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text(_month != null ? '$_month' : '')),
-      body: SimpleTimetable(
+      body: SimpleTimetable<TimeTableEvent>(
         onChange: (
           DateTime date,
           TimetableDirection dir,
@@ -102,11 +102,11 @@ class _MyHomePageState extends State<MyHomePage> {
             _month = date;
           });
         },
-        initialDate: _initDate.startOfDay,
+        initialDate: _initDate,
         dayStart: 8,
         dayEnd: 24,
         events: _events,
-        buildCard: (Event event, bool isPast) {
+        buildCard: (event, isPast) {
           return GestureDetector(
             onTap: () {
               print(event.payload.data.title);

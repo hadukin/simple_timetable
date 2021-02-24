@@ -3,12 +3,12 @@ import 'package:simple_timetable/src/event.dart';
 import 'package:simple_timetable/src/event_card.dart';
 import 'package:simple_timetable/src/event_position.dart';
 
-List<Widget> eventsCreate({
-  List<List<Event<dynamic>>> events,
+List<Widget> eventsCreate<T>({
+  List<List<Event<T>>> events,
   @required int dayStartFrom,
   @required double cellWidth,
   @required double cellHeight,
-  @required Widget Function(Event event, bool isPast) buildCard,
+  @required Widget Function(Event<T> event, bool isPast) buildCard,
 }) {
   List<Widget> listWidgets = [];
   for (final item in events) {
@@ -22,7 +22,7 @@ List<Widget> eventsCreate({
         left: i,
         count: item.length,
       );
-      listWidgets.add(EventCard(
+      listWidgets.add(EventCard<T>(
         event: item[i],
         position: position,
         buildCard: buildCard,
