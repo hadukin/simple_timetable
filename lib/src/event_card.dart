@@ -7,7 +7,7 @@ import 'package:simple_timetable/src/event_position.dart';
 import 'package:dart_date/dart_date.dart';
 
 class EventCard<T> extends StatefulWidget {
-  EventCard({
+  const EventCard({
     Key key,
     this.position,
     this.event,
@@ -23,7 +23,7 @@ class EventCard<T> extends StatefulWidget {
 
 class _EventCardState<T> extends State<EventCard<T>> {
   Timer _timer;
-  ValueNotifier<DateTime> _now = ValueNotifier(DateTime.now());
+  final ValueNotifier<DateTime> _now = ValueNotifier(DateTime.now());
 
   @override
   void dispose() {
@@ -35,7 +35,7 @@ class _EventCardState<T> extends State<EventCard<T>> {
   void initState() {
     super.initState();
     _now.value = DateTime.now();
-    _timer = Timer.periodic(Duration(minutes: 1), (timer) {
+    _timer = Timer.periodic(const Duration(minutes: 1), (timer) {
       _now.value = DateTime.now();
     });
   }
@@ -45,9 +45,9 @@ class _EventCardState<T> extends State<EventCard<T>> {
     return ValueListenableBuilder<DateTime>(
       valueListenable: _now,
       builder: (context, v, child) {
-        DateTime _current =
+        final DateTime _current =
             DateTime.utc(v.year, v.month, v.day, v.hour, v.minute);
-        bool _isPast = _current > widget.event.end;
+        final bool _isPast = _current > widget.event.end;
         return Positioned(
           top: widget.position.top,
           left: widget.position.left,
@@ -62,7 +62,7 @@ class _EventCardState<T> extends State<EventCard<T>> {
             width: widget.position.width,
             child: widget.buildCard != null
                 ? widget.buildCard(widget.event, _isPast)
-                : SizedBox.shrink(),
+                : const SizedBox.shrink(),
           ),
         );
       },

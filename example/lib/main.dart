@@ -46,9 +46,13 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Future<List<TimeTableEvent>> _getTimetable([String query]) async {
     var dataString = await rootBundle.loadString('assets/data.json');
-    var data = json.decode(dataString);
-    List<TimeTableEvent> _events = (data['events'] as List)
-        .map((item) => TimeTableEvent.fromJson(item))
+    var data = json.decode(dataString) as Map<String, dynamic>;
+
+    final list = data['events'] as List<dynamic>;
+    final listCast = list.cast<Map<String, dynamic>>();
+
+    List<TimeTableEvent> _events = listCast
+        .map<TimeTableEvent>((item) => TimeTableEvent.fromJson(item))
         .toList();
     return _events;
   }
@@ -79,7 +83,7 @@ class _MyHomePageState extends State<MyHomePage> {
     return TableQuery(params: _query, start: _start, end: _end);
   }
 
-  _onPressed([DateTime start, DateTime end]) async {
+  Future<void> _onPressed([DateTime start, DateTime end]) async {
     setState(() {
       _initDate = DateTime.now().addMonths(1);
     });
