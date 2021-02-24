@@ -1,3 +1,10 @@
+# 0.0.11
+
+## Feat
+
+- Add lint
+- Add customazing controls button prev/next
+
 # 0.0.10
 
 ## Feat

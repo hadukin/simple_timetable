@@ -25,6 +25,8 @@ class SimpleTimetable<T> extends StatefulWidget {
     this.dayEnd = 20,
     this.visibleRange = 7,
     this.colorTimeline,
+    this.prevBotton,
+    this.nextBotton,
   })  : assert(initialDate != null),
         assert(dayStart < dayEnd),
         assert(dayEnd > dayStart),
@@ -41,13 +43,14 @@ class SimpleTimetable<T> extends StatefulWidget {
   final int dayEnd;
   final DateTime initialDate;
   final Function(
-    DateTime date,
-    TimetableDirection dir,
     List<DateTime> currentColumns,
+    TimetableDirection dir,
   ) onChange;
   final Widget Function(Event<T> event, bool isPast) buildCard;
   final Widget Function(bool isFirstColumn, bool isLastColumn) buildCell;
   final Widget Function(DateTime date, bool isToday) buildHeader;
+  final Widget prevBotton;
+  final Widget nextBotton;
 
   @override
   SimpleTimetableState<T> createState() => SimpleTimetableState();
@@ -132,7 +135,7 @@ class SimpleTimetableState<T> extends State<SimpleTimetable<T>> {
     _columns = _timetableHelper.getTable(start);
     _timeLine = _timetableHelper.getTimeLineForDay(start);
     // TODO: start will be deprecated
-    widget.onChange(start, dir, _columns.keys.toList());
+    widget.onChange(_columns.keys.toList(), dir);
     setState(() {});
   }
 
@@ -194,20 +197,56 @@ class SimpleTimetableState<T> extends State<SimpleTimetable<T>> {
   }
 
   Widget _prev(DateTime date) {
+    if (widget.prevBotton != null) {
+      return GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: () {
+          _createTable(
+            start: date.subDays(1),
+            dir: TimetableDirection.backward,
+          );
+        },
+        child: widget.prevBotton,
+      );
+    }
     return IconButton(
       onPressed: () {
-        _createTable(start: date.subDays(1), dir: TimetableDirection.backward);
+        _createTable(
+          start: date.subDays(1),
+          dir: TimetableDirection.backward,
+        );
       },
-      icon: const Icon(Icons.arrow_back_ios, color: Colors.black54),
+      icon: const Icon(
+        Icons.arrow_back_ios,
+        color: Colors.black54,
+      ),
     );
   }
 
   Widget _next(DateTime date) {
+    if (widget.nextBotton != null) {
+      return GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: () {
+          _createTable(
+            start: date.addDays(1),
+            dir: TimetableDirection.forward,
+          );
+        },
+        child: widget.nextBotton,
+      );
+    }
     return IconButton(
       onPressed: () {
-        _createTable(start: date.addDays(1), dir: TimetableDirection.forward);
+        _createTable(
+          start: date.addDays(1),
+          dir: TimetableDirection.forward,
+        );
       },
-      icon: const Icon(Icons.arrow_forward_ios, color: Colors.black54),
+      icon: const Icon(
+        Icons.arrow_forward_ios,
+        color: Colors.black54,
+      ),
     );
   }
 

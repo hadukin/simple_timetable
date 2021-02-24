@@ -95,15 +95,14 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(title: Text(_month != null ? '$_month' : '')),
       body: SimpleTimetable<TimeTableEvent>(
         onChange: (
-          DateTime date,
-          TimetableDirection dir,
           List<DateTime> current,
+          TimetableDirection dir,
         ) {
-          print('On change date: $date');
+          print('On change date: ${current[0]}');
           print('On change direction: $dir');
           print('On change columns $current');
           setState(() {
-            _month = date;
+            _month = current[0];
           });
         },
         initialDate: _initDate,
