@@ -9,7 +9,7 @@ import 'package:simple_timetable/src/timeline.dart';
 import 'package:simple_timetable/src/timetable_helper.dart';
 import 'package:intl/intl.dart';
 
-class SimpleTimetable extends StatefulWidget {
+class SimpleTimetable<T> extends StatefulWidget {
   SimpleTimetable({
     Key key,
     @required this.initialDate,
@@ -32,7 +32,7 @@ class SimpleTimetable extends StatefulWidget {
         assert(dayEnd > 0 && dayEnd <= 24),
         super(key: key);
   final Color colorTimeline;
-  final List<Event> events;
+  final List<Event<T>> events;
   final double cellHeight;
   final double timelineColumnWidth;
   final double horizontalIndent;
@@ -45,21 +45,21 @@ class SimpleTimetable extends StatefulWidget {
     TimetableDirection dir,
     List<DateTime> currentColumns,
   ) onChange;
-  final Widget Function(Event event, bool isPast) buildCard;
+  final Widget Function(Event<T> event, bool isPast) buildCard;
   final Widget Function(bool isFirstColumn, bool isLastColumn) buildCell;
   final Widget Function(DateTime date, bool isToday) buildHeader;
 
   @override
-  SimpleTimetableState createState() => SimpleTimetableState();
+  SimpleTimetableState<T> createState() => SimpleTimetableState();
 }
 
-class SimpleTimetableState extends State<SimpleTimetable> {
+class SimpleTimetableState<T> extends State<SimpleTimetable<T>> {
   Timer _timer;
   double _dragDirection = 0;
   List<DateTime> _timeLine = [];
   TimetableHelper _timetableHelper;
   Map<DateTime, List<DateTime>> _columns = {};
-  Map<DateTime, List<List<Event>>> _groups = {};
+  Map<DateTime, List<List<Event<T>>>> _groups = {};
   ValueNotifier<double> _timeLinePosition = ValueNotifier(0.0);
 
   @override
@@ -74,7 +74,7 @@ class SimpleTimetableState extends State<SimpleTimetable> {
       });
     }
     if (widget.events.isNotEmpty) {
-      getGroups(widget.events).then(
+      getGroups<T>(widget.events).then(
         (value) {
           setState(() {
             _groups = value;
@@ -213,7 +213,7 @@ class SimpleTimetableState extends State<SimpleTimetable> {
         var cellWidth = constraints.constrainWidth();
         List<Widget> eventWidgets;
         if (_groups.keys.contains(column.key)) {
-          eventWidgets = eventsCreate(
+          eventWidgets = eventsCreate<T>(
             dayStartFrom: widget.dayStart,
             events: _groups[column.key],
             cellHeight: widget.cellHeight,

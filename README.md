@@ -8,7 +8,7 @@ Simple timetable.
 
 ##### Event model
 
-```
+```dart
 class Event<T> {
   final String id;
   final DateTime start;
@@ -28,10 +28,10 @@ class Event<T> {
 
 ##### Usage
 
-```
+```dart
 Widget build(BuildContext context) {
   return Scaffold(
-    body: SimpleTimetable(
+    body: SimpleTimetable<TimeTableEvent>(
       onChange: (DateTime date, TimetableDirection dir) {
         print('On change date: $date');
         print('On change direction: $dir');

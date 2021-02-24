@@ -1,12 +1,12 @@
 import 'package:simple_timetable/simple_timetable.dart';
 import 'package:dart_date/dart_date.dart';
 
-Future<Map<DateTime, List<List<Event>>>> getGroups(
-  List<Event> data,
+Future<Map<DateTime, List<List<Event<T>>>>> getGroups<T>(
+  List<Event<T>> data,
 ) async {
   data..sort((a, b) => a.start.compareTo(b.start));
-
-  Map<DateTime, List<Event>> groups = {};
+  Map<DateTime, List<Event<T>>> groups = {};
+  Map<DateTime, List<List<Event<T>>>> _grouped = {};
 
   data.forEach((item) {
     if (!groups.containsKey(item.date.startOfDay)) {
@@ -16,9 +16,7 @@ Future<Map<DateTime, List<List<Event>>>> getGroups(
     }
   });
 
-  Map<DateTime, List<List<Event>>> _grouped = {};
-
-  groups.entries.forEach((item) {
+  groups.entries.forEach((item) async {
     _grouped[item.key] = _getSortByOverlap(
       item.value..sort((a, b) => a.start.compareTo(b.start)),
     );
@@ -27,12 +25,12 @@ Future<Map<DateTime, List<List<Event>>>> getGroups(
   return _grouped;
 }
 
-List<List<Event>> _getSortByOverlap(List<Event> data) {
-  List<Event> current = [];
+List<List<Event<T>>> _getSortByOverlap<T>(List<Event<T>> data) {
+  List<Event<T>> current = [];
   List<dynamic> isOverlap = [];
   List<dynamic> isOverlapCount = [];
-  List<List<Event>> groupedEvents = [];
-  Map<int, List<Event>> temp = {};
+  List<List<Event<T>>> groupedEvents = [];
+  Map<int, List<Event<T>>> temp = {};
   int enterGroup;
 
   for (var i = 0; i < data.length; i++) {
@@ -59,7 +57,7 @@ List<List<Event>> _getSortByOverlap(List<Event> data) {
   return groupedEvents;
 }
 
-_periodOverlaps(Event testPeriod, List<Event> periods) {
+_periodOverlaps<T>(Event<T> testPeriod, List<Event<T>> periods) {
   for (var i = 0; i < periods.length; i++) {
     final period = periods[i];
     if (period.id != testPeriod.id) {

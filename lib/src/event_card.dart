@@ -6,18 +6,22 @@ import 'package:simple_timetable/src/event.dart';
 import 'package:simple_timetable/src/event_position.dart';
 import 'package:dart_date/dart_date.dart';
 
-class EventCard extends StatefulWidget {
-  EventCard({Key key, this.position, this.event, this.buildCard})
-      : super(key: key);
+class EventCard<T> extends StatefulWidget {
+  EventCard({
+    Key key,
+    this.position,
+    this.event,
+    this.buildCard,
+  }) : super(key: key);
   final EventPosition position;
-  final Event event;
-  final Widget Function(Event event, bool isPast) buildCard;
+  final Event<T> event;
+  final Widget Function(Event<T> event, bool isPast) buildCard;
 
   @override
-  _EventCardState createState() => _EventCardState();
+  _EventCardState<T> createState() => _EventCardState();
 }
 
-class _EventCardState extends State<EventCard> {
+class _EventCardState<T> extends State<EventCard<T>> {
   Timer _timer;
   ValueNotifier<DateTime> _now = ValueNotifier(DateTime.now());
 
