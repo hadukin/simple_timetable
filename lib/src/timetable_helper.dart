@@ -12,26 +12,26 @@ class TimetableHelper {
   });
 
   List<DateTime> _getTimetable({DateTime start}) {
-    DateTime _now = start ?? Date.startOfToday;
-    return List.generate(
-        this.visibleRange, (index) => _now + Duration(days: index));
+    final DateTime _now = start ?? Date.startOfToday;
+    return List.generate(visibleRange, (index) => _now + Duration(days: index));
   }
 
   Map<DateTime, List<DateTime>> getTable([DateTime start]) {
-    DateTime _now = start ?? Date.startOfToday;
-    List<DateTime> timetable = _getTimetable(start: _now.startOfDay);
-    Map<DateTime, List<DateTime>> table = {};
+    final DateTime _now = start ?? Date.startOfToday;
+    final List<DateTime> timetable = _getTimetable(start: _now.startOfDay);
+    final Map<DateTime, List<DateTime>> table = {};
 
-    timetable.forEach((day) {
+    for (final day in timetable) {
       table.putIfAbsent(day, () => getTimeLineForDay(day));
-    });
+    }
+
     return table;
   }
 
   List<DateTime> getTimeLineForDay([DateTime day]) {
-    DateTime _day = day ?? Date.startOfToday;
-    return List.generate(this.dayEndTime - this.dayStartTime, (index) {
-      return _day.setHour(index + this.dayStartTime);
+    final DateTime _day = day ?? Date.startOfToday;
+    return List.generate(dayEndTime - dayStartTime, (index) {
+      return _day.setHour(index + dayStartTime);
     });
   }
 }

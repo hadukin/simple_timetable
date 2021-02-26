@@ -15,8 +15,8 @@ class TimeLine extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double _w = MediaQuery.of(context).size.width;
-    double _width = _w - timelineColumnWidth - 4 - (horizontalIndent * 2);
+    final double _w = MediaQuery.of(context).size.width;
+    final double _width = _w - timelineColumnWidth - 4 - (horizontalIndent * 2);
 
     // TODO: create current time
     // String _pattern = 'H:mm';
@@ -34,7 +34,7 @@ class TimeLine extends StatelessWidget {
           //     style: TextStyle(fontSize: 10, color: Colors.red),
           //   ),
           // ),
-          SizedBox(width: 4),
+          const SizedBox(width: 4),
           Container(
             width: 8,
             height: 8,

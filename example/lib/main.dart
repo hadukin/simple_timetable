@@ -1,10 +1,6 @@
-import 'dart:convert';
 import 'package:example/models/event.dart';
-import 'package:example/models/table_query.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:simple_timetable/simple_timetable.dart';
-import 'package:intl/intl.dart';
 import 'package:dart_date/dart_date.dart';
 
 void main() {
@@ -35,105 +31,192 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   DateTime _month = DateTime.now();
   DateTime _initDate = DateTime.now();
-  List<Event<TimeTableEvent>> _events = [];
-
-  @override
-  void initState() {
-    super.initState();
-    TableQuery query = getQuery();
-    getData(query);
-  }
-
-  Future<List<TimeTableEvent>> _getTimetable([String query]) async {
-    var dataString = await rootBundle.loadString('assets/data.json');
-    var data = json.decode(dataString);
-    List<TimeTableEvent> _events = (data['events'] as List)
-        .map((item) => TimeTableEvent.fromJson(item))
-        .toList();
-    return _events;
-  }
-
-  void getData(TableQuery query) async {
-    List<TimeTableEvent> data = await _getTimetable(query.params);
-    List<Event<TimeTableEvent>> _data = data
-        .map((item) => Event<TimeTableEvent>(
-              id: UniqueKey().toString(),
-              date: item.startDate,
-              start: Date.parse(item.data.eventStart),
-              end: Date.parse(item.data.eventEnd),
-              payload: item,
-            ))
-        .toList();
-    setState(() {
-      _events.addAll(_data);
-    });
-  }
-
-  TableQuery getQuery({DateTime start, DateTime end}) {
-    String _pattern = 'yyyy-MM-dd';
-    DateTime _start = start ?? Date.startOfToday;
-    DateTime _end = end ?? _start.addDays(6);
-    String _startString = DateFormat(_pattern).format(_start);
-    String _endString = DateFormat(_pattern).format(_end);
-    String _query = 'start=$_startString&end=$_endString';
-    return TableQuery(params: _query, start: _start, end: _end);
-  }
-
-  _onPressed([DateTime start, DateTime end]) async {
-    setState(() {
-      _initDate = DateTime.now().addMonths(1);
-    });
-  }
+  int visibleRange = 7;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(_month != null ? '$_month' : '')),
-      body: SimpleTimetable<TimeTableEvent>(
-        onChange: (
-          DateTime date,
-          TimetableDirection dir,
-          List<DateTime> current,
-        ) {
-          print('On change date: $date');
-          print('On change direction: $dir');
-          print('On change columns $current');
-          setState(() {
-            _month = date;
-          });
-        },
-        initialDate: _initDate,
-        dayStart: 8,
-        dayEnd: 24,
-        events: _events,
-        buildCard: (event, isPast) {
-          return GestureDetector(
-            onTap: () {
-              print(event.payload.data.title);
-            },
-            child: Container(
-              decoration: BoxDecoration(
-                border: Border.all(color: Colors.black),
-                borderRadius: BorderRadius.circular(4),
-                color: isPast
-                    ? Colors.grey[400]
-                    : Colors.blue[200].withOpacity(0.5),
-              ),
-              child: Column(
-                children: [
-                  Text(
-                    '${event.start.format('hh:mm')}\n${event.end.format('hh:mm')}',
-                    style: TextStyle(fontSize: 10),
-                  ),
-                ],
-              ),
-            ),
-          );
-        },
+      appBar: AppBar(
+        title: Text(_month != null
+            ? '${_month.year}-${_month.month}-${_month.day}'
+            : ''),
+        actions: [],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _onPressed,
+      body: Column(
+        children: [
+          Container(
+            color: Colors.grey[300],
+            child: Row(
+              children: [
+                SizedBox(width: 24),
+                RaisedButton(
+                  color: Colors.blue[300],
+                  child: Text('Change visible range'),
+                  onPressed: () {
+                    setState(() {
+                      visibleRange = visibleRange == 7 ? 3 : 7;
+                    });
+                  },
+                ),
+                SizedBox(width: 24),
+                RaisedButton(
+                  color: Colors.blue[300],
+                  child: Text('Change initial date '),
+                  onPressed: () {
+                    setState(() {
+                      _initDate = DateTime.now().addMonths(1);
+                    });
+                  },
+                ),
+                SizedBox(width: 24),
+              ],
+            ),
+          ),
+          SizedBox(height: 24),
+          Expanded(
+            child: SimpleTimetable<TimeTableEvent>(
+              onChange: (
+                List<DateTime> current,
+                TimetableDirection dir,
+              ) {
+                print('On change date: ${current[0]}');
+                print('On change direction: $dir');
+                print('On change columns $current');
+                setState(() {
+                  _month = current[0];
+                });
+              },
+              initialDate: _initDate,
+              dayStart: 8,
+              dayEnd: 24,
+              events: eventsList,
+              visibleRange: visibleRange,
+              buildCard: (event, isPast) {
+                return GestureDetector(
+                  onTap: () {
+                    print(event.payload.data.title);
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.black),
+                      borderRadius: BorderRadius.circular(4),
+                      color: isPast
+                          ? Colors.grey[400]
+                          : Colors.blue[200].withOpacity(0.5),
+                    ),
+                    child: Column(
+                      children: [
+                        Text(
+                          '${event.payload.data.title}',
+                          style: TextStyle(fontSize: 10),
+                        ),
+                        Text(
+                          '${event.start.format('hh:mm')}\n${event.end.format('hh:mm')}',
+                          style: TextStyle(fontSize: 10),
+                        ),
+                        Text(
+                          'isPast: $isPast',
+                          style: TextStyle(fontSize: 10),
+                        )
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
       ),
     );
   }
 }
+
+List<Event<TimeTableEvent>> eventsList = [
+  Event<TimeTableEvent>(
+    id: UniqueKey().toString(),
+    start: DateTime.now().startOfDay.add(Duration(hours: 9)),
+    end: DateTime.now().startOfDay.add(Duration(hours: 10)),
+    date: DateTime.now().startOfDay,
+    payload: TimeTableEvent(
+      data: EventPayload(title: 'Event 1'),
+    ),
+  ),
+  Event<TimeTableEvent>(
+    id: UniqueKey().toString(),
+    start: DateTime.now().startOfDay.add(Duration(hours: 12)),
+    end: DateTime.now().startOfDay.add(Duration(hours: 13, minutes: 45)),
+    date: DateTime.now().startOfDay,
+    payload: TimeTableEvent(
+      data: EventPayload(title: 'Event 2'),
+    ),
+  ),
+  Event<TimeTableEvent>(
+    id: UniqueKey().toString(),
+    start: DateTime.now().startOfDay.add(Duration(hours: 11)),
+    end: DateTime.now().startOfDay.add(Duration(hours: 12, minutes: 15)),
+    date: DateTime.now().startOfDay,
+    payload: TimeTableEvent(
+      data: EventPayload(title: 'Event 3'),
+    ),
+  ),
+  Event<TimeTableEvent>(
+    id: UniqueKey().toString(),
+    start: DateTime.now().startOfDay.add(
+          Duration(
+            days: 1,
+            hours: 9,
+          ),
+        ),
+    end: DateTime.now().startOfDay.add(
+          Duration(
+            days: 1,
+            hours: 10,
+            minutes: 15,
+          ),
+        ),
+    date: DateTime.now().startOfDay.add(Duration(days: 1)),
+    payload: TimeTableEvent(
+      data: EventPayload(title: 'Event 4'),
+    ),
+  ),
+  Event<TimeTableEvent>(
+    id: UniqueKey().toString(),
+    start: DateTime.now().startOfDay.add(
+          Duration(
+            days: 1,
+            hours: 9,
+          ),
+        ),
+    end: DateTime.now().startOfDay.add(
+          Duration(
+            days: 1,
+            hours: 10,
+            minutes: 15,
+          ),
+        ),
+    date: DateTime.now().startOfDay.add(Duration(days: 1)),
+    payload: TimeTableEvent(
+      data: EventPayload(title: 'Event 5'),
+    ),
+  ),
+  Event<TimeTableEvent>(
+    id: UniqueKey().toString(),
+    start: DateTime.now().startOfDay.add(
+          Duration(
+            days: 2,
+            hours: 10,
+          ),
+        ),
+    end: DateTime.now().startOfDay.add(
+          Duration(
+            days: 2,
+            hours: 11,
+            minutes: 30,
+          ),
+        ),
+    date: DateTime.now().startOfDay.add(Duration(days: 2)),
+    payload: TimeTableEvent(
+      data: EventPayload(title: 'Event 6'),
+    ),
+  ),
+];

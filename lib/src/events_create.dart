@@ -13,7 +13,7 @@ List<Widget> eventsCreate<T>({
   List<Widget> listWidgets = [];
   for (final item in events) {
     for (int i = 0; i < item.length; i++) {
-      EventPosition position = eventPosition(
+      final EventPosition position = eventPosition(
         cellWidth: cellWidth,
         cellHeight: cellHeight,
         dayStartFrom: dayStartFrom,

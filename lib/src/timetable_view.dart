@@ -10,7 +10,7 @@ import 'package:simple_timetable/src/timetable_helper.dart';
 import 'package:intl/intl.dart';
 
 class SimpleTimetable<T> extends StatefulWidget {
-  SimpleTimetable({
+  const SimpleTimetable({
     Key key,
     @required this.initialDate,
     @required this.events,
@@ -25,6 +25,8 @@ class SimpleTimetable<T> extends StatefulWidget {
     this.dayEnd = 20,
     this.visibleRange = 7,
     this.colorTimeline,
+    this.prevBotton,
+    this.nextBotton,
   })  : assert(initialDate != null),
         assert(dayStart < dayEnd),
         assert(dayEnd > dayStart),
@@ -41,13 +43,14 @@ class SimpleTimetable<T> extends StatefulWidget {
   final int dayEnd;
   final DateTime initialDate;
   final Function(
-    DateTime date,
-    TimetableDirection dir,
     List<DateTime> currentColumns,
+    TimetableDirection dir,
   ) onChange;
   final Widget Function(Event<T> event, bool isPast) buildCard;
   final Widget Function(bool isFirstColumn, bool isLastColumn) buildCell;
   final Widget Function(DateTime date, bool isToday) buildHeader;
+  final Widget prevBotton;
+  final Widget nextBotton;
 
   @override
   SimpleTimetableState<T> createState() => SimpleTimetableState();
@@ -60,11 +63,20 @@ class SimpleTimetableState<T> extends State<SimpleTimetable<T>> {
   TimetableHelper _timetableHelper;
   Map<DateTime, List<DateTime>> _columns = {};
   Map<DateTime, List<List<Event<T>>>> _groups = {};
-  ValueNotifier<double> _timeLinePosition = ValueNotifier(0.0);
+  final ValueNotifier<double> _timeLinePosition = ValueNotifier(0.0);
 
   @override
-  void didUpdateWidget(oldWidget) {
+  void didUpdateWidget(SimpleTimetable<T> oldWidget) {
     super.didUpdateWidget(oldWidget);
+    if (oldWidget.visibleRange != widget.visibleRange) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _createTable(
+          start: _columns.keys.first ?? DateTime.now(),
+          dir: TimetableDirection.none,
+        );
+      });
+    }
+
     if (oldWidget.initialDate.startOfDay != widget.initialDate.startOfDay) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         _createTable(
@@ -73,6 +85,7 @@ class SimpleTimetableState<T> extends State<SimpleTimetable<T>> {
         );
       });
     }
+
     if (widget.events.isNotEmpty) {
       getGroups<T>(widget.events).then(
         (value) {
@@ -80,7 +93,10 @@ class SimpleTimetableState<T> extends State<SimpleTimetable<T>> {
             _groups = value;
           });
         },
-      ).catchError((e) => print('GET GROUPS ERROR\n$e'));
+      ).catchError((dynamic e) {
+        // ignore: avoid_print
+        print('GET GROUPS ERROR\n$e');
+      });
     }
   }
 
@@ -95,7 +111,7 @@ class SimpleTimetableState<T> extends State<SimpleTimetable<T>> {
     super.initState();
 
     _timelinePosition();
-    _timer = Timer.periodic(Duration(minutes: 1), (timer) {
+    _timer = Timer.periodic(const Duration(minutes: 1), (timer) {
       _timelinePosition();
     });
 
@@ -107,10 +123,10 @@ class SimpleTimetableState<T> extends State<SimpleTimetable<T>> {
     });
   }
 
-  _timelinePosition() {
-    var _t = (widget.cellHeight / 60);
-    var _todayStart = Date.today.startOfDay.addHours(widget.dayStart);
-    var _now = DateTime.now();
+  void _timelinePosition() {
+    final _t = widget.cellHeight / 60;
+    final _todayStart = Date.today.startOfDay.addHours(widget.dayStart);
+    final _now = DateTime.now();
     var _diff = _todayStart.differenceInMinutes(_now).abs();
     if (_todayStart.differenceInMinutes(_now) < 0) {
       _diff = _todayStart.differenceInMinutes(_now).abs();
@@ -120,7 +136,7 @@ class SimpleTimetableState<T> extends State<SimpleTimetable<T>> {
     _timeLinePosition.value = _diff * _t;
   }
 
-  _createTable({DateTime start, TimetableDirection dir}) {
+  void _createTable({DateTime start, TimetableDirection dir}) {
     _timetableHelper = TimetableHelper(
       dayStartTime: widget.dayStart,
       dayEndTime: widget.dayEnd,
@@ -128,8 +144,7 @@ class SimpleTimetableState<T> extends State<SimpleTimetable<T>> {
     );
     _columns = _timetableHelper.getTable(start);
     _timeLine = _timetableHelper.getTimeLineForDay(start);
-    // TODO: start will be deprecated
-    widget.onChange(start, dir, _columns.keys.toList());
+    widget.onChange(_columns.keys.toList(), dir);
     setState(() {});
   }
 
@@ -139,9 +154,10 @@ class SimpleTimetableState<T> extends State<SimpleTimetable<T>> {
 
   BoxDecoration _cellDefaultStyle({bool isFirst, bool isLast}) => BoxDecoration(
         border: Border(
-          top: BorderSide(color: Color(0xffDEE2E8)),
-          right:
-              isLast ? BorderSide.none : BorderSide(color: Color(0xffDEE2E8)),
+          top: const BorderSide(color: Color(0xffDEE2E8)),
+          right: isLast
+              ? BorderSide.none
+              : const BorderSide(color: Color(0xffDEE2E8)),
         ),
       );
 
@@ -151,8 +167,8 @@ class SimpleTimetableState<T> extends State<SimpleTimetable<T>> {
       children: [
         ...column.value.map(
           (elem) {
-            bool _isFirstColumn = _getFirstColumn(column.key);
-            bool _isLastColumn = _getLastColumn(column.key);
+            final bool _isFirstColumn = _getFirstColumn(column.key);
+            final bool _isLastColumn = _getLastColumn(column.key);
             return Container(
               decoration: widget.buildCell != null
                   ? null
@@ -171,16 +187,16 @@ class SimpleTimetableState<T> extends State<SimpleTimetable<T>> {
     );
   }
 
-  _cellHeader(DateTime day, bool _isToday) {
+  Widget _cellHeader(DateTime day, bool _isToday) {
     return Center(
       child: Container(
         decoration: BoxDecoration(
           color: _isToday ? Colors.blue[400] : Colors.transparent,
           borderRadius: BorderRadius.circular(20),
         ),
-        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
         child: Text(
-          '${DateFormat("d").format(day)}',
+          DateFormat("d").format(day),
           style: TextStyle(
             color: _isToday ? Colors.white : Colors.black54,
           ),
@@ -189,28 +205,42 @@ class SimpleTimetableState<T> extends State<SimpleTimetable<T>> {
     );
   }
 
-  _prev(DateTime date) {
+  Widget _prev(DateTime date) {
     return IconButton(
       onPressed: () {
-        _createTable(start: date.subDays(1), dir: TimetableDirection.backward);
+        _createTable(
+          start: date.subDays(1),
+          dir: TimetableDirection.backward,
+        );
       },
-      icon: Icon(Icons.arrow_back_ios, color: Colors.black54),
+      icon: widget.prevBotton ??
+          const Icon(
+            Icons.arrow_back_ios,
+            color: Colors.black54,
+          ),
     );
   }
 
-  _next(DateTime date) {
+  Widget _next(DateTime date) {
     return IconButton(
       onPressed: () {
-        _createTable(start: date.addDays(1), dir: TimetableDirection.forward);
+        _createTable(
+          start: date.addDays(1),
+          dir: TimetableDirection.forward,
+        );
       },
-      icon: Icon(Icons.arrow_forward_ios, color: Colors.black54),
+      icon: widget.nextBotton ??
+          const Icon(
+            Icons.arrow_forward_ios,
+            color: Colors.black54,
+          ),
     );
   }
 
-  Widget _eventsForColumn(column) {
+  Widget _eventsForColumn(MapEntry<DateTime, List<DateTime>> column) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        var cellWidth = constraints.constrainWidth();
+        final cellWidth = constraints.constrainWidth();
         List<Widget> eventWidgets;
         if (_groups.keys.contains(column.key)) {
           eventWidgets = eventsCreate<T>(
@@ -220,13 +250,11 @@ class SimpleTimetableState<T> extends State<SimpleTimetable<T>> {
             cellWidth: cellWidth,
             buildCard: widget.buildCard,
           );
-        } else {
-          eventWidgets = [SizedBox.shrink()];
         }
         return Stack(
           children: [
             _cell(column),
-            ...eventWidgets,
+            ...?eventWidgets,
           ],
         );
       },
@@ -235,7 +263,7 @@ class SimpleTimetableState<T> extends State<SimpleTimetable<T>> {
 
   @override
   Widget build(BuildContext context) {
-    if (_timeLine.isEmpty || _columns.isEmpty) return SizedBox.shrink();
+    if (_timeLine.isEmpty || _columns.isEmpty) return const SizedBox.shrink();
     return Column(
       children: [
         Padding(
@@ -245,25 +273,25 @@ class SimpleTimetableState<T> extends State<SimpleTimetable<T>> {
           ),
           child: Row(
             children: [
-              Container(
+              SizedBox(
                 width: widget.timelineColumnWidth,
                 child: _prev(_columns?.keys?.first),
               ),
               ..._columns?.keys?.map(
                 (day) {
-                  bool _isToday = day == Date.today.startOfDay;
+                  final bool _isToday = day == Date.today.startOfDay;
                   return Expanded(
-                    child: Container(
-                      height: 60, // TODO:
+                    child: SizedBox(
+                      height: 60,
                       child: Align(
-                          alignment: Alignment.center,
                           child: _columns?.keys?.last == day
                               ? Stack(
                                   fit: StackFit.expand,
                                   children: [
-                                    widget.buildHeader != null
-                                        ? widget.buildHeader(day, _isToday)
-                                        : _cellHeader(day, _isToday),
+                                    if (widget.buildHeader != null)
+                                      widget.buildHeader(day, _isToday)
+                                    else
+                                      _cellHeader(day, _isToday),
                                     Positioned(
                                       top: 0,
                                       right: 0,
@@ -289,10 +317,10 @@ class SimpleTimetableState<T> extends State<SimpleTimetable<T>> {
             },
             onHorizontalDragEnd: (DragEndDetails details) {
               if (_dragDirection < 0) {
-                DateTime _date = _columns?.keys?.first?.addDays(1);
+                final DateTime _date = _columns?.keys?.first?.addDays(1);
                 _createTable(start: _date, dir: TimetableDirection.forward);
               } else {
-                DateTime _date = _columns?.keys?.first?.subDays(1);
+                final DateTime _date = _columns?.keys?.first?.subDays(1);
                 _createTable(start: _date, dir: TimetableDirection.backward);
               }
             },
@@ -310,7 +338,7 @@ class SimpleTimetableState<T> extends State<SimpleTimetable<T>> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Container(
+                        SizedBox(
                           width: widget.timelineColumnWidth,
                           child: Stack(
                             overflow: Overflow.visible,
@@ -322,18 +350,18 @@ class SimpleTimetableState<T> extends State<SimpleTimetable<T>> {
                                     (item) {
                                       return Container(
                                         alignment: Alignment.topRight,
-                                        decoration: BoxDecoration(
+                                        decoration: const BoxDecoration(
                                           border: Border(),
                                         ),
-                                        clipBehavior: Clip.none,
                                         height: widget.cellHeight,
                                         child: Transform.translate(
-                                          offset: Offset(-8.0, -8.0),
-                                          child: Container(
+                                          offset: const Offset(-8.0, -8.0),
+                                          child: SizedBox(
                                             child: Text(
-                                              '${DateFormat("H:00").format(item)}',
-                                              style: TextStyle(
-                                                  color: Colors.black54),
+                                              DateFormat("H:00").format(item),
+                                              style: const TextStyle(
+                                                color: Colors.black54,
+                                              ),
                                             ),
                                           ),
                                         ),

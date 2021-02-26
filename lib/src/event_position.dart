@@ -25,13 +25,13 @@ EventPosition eventPosition({
   @required double cellWidth,
   int indent = 6,
 }) {
-  double _t = (cellHeight / 60);
-  double _height = start.differenceInMinutes(end).abs() * _t;
-  double _width = (cellWidth.toDouble() / count) - indent;
-  double _top =
+  final double _t = cellHeight / 60;
+  final double _height = start.differenceInMinutes(end).abs() * _t;
+  final double _width = (cellWidth.toDouble() / count) - indent;
+  final double _top =
       (((dayStartFrom - start.hour).abs()) * cellHeight) + start.minute;
 
-  double _left = count > 1
+  final double _left = count > 1
       ? ((_width * left) + (indent / count)) + (indent * left)
       : (_width * left) + (indent / 2);
 
