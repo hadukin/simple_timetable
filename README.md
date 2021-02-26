@@ -4,7 +4,7 @@ Simple timetable.
 
 ## Example
 
-![screenshot2](screenshot/screenshot_1.gif)
+![screenshot2](screenshot/screenshot_2.gif)
 
 ### Event model
 
