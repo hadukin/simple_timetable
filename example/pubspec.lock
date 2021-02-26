@@ -175,7 +175,7 @@ packages:
       name: dart_date
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.7"
+    version: "1.0.9"
   dart_style:
     dependency: transitive
     description:
@@ -395,7 +395,7 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "0.0.10"
+    version: "0.0.11"
   sky_engine:
     dependency: transitive
     description: flutter
@@ -463,7 +463,7 @@ packages:
       name: timeago
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.27"
+    version: "2.0.30"
   timing:
     dependency: transitive
     description:
@@ -507,5 +507,5 @@ packages:
     source: hosted
     version: "2.2.1"
 sdks:
-  dart: ">=2.10.0-110 <2.11.0"
+  dart: ">=2.10.0 <2.11.0"
   flutter: ">=1.17.0 <2.0.0"
