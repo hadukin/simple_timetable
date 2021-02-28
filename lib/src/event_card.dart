@@ -8,21 +8,21 @@ import 'package:dart_date/dart_date.dart';
 
 class EventCard<T> extends StatefulWidget {
   const EventCard({
-    Key key,
-    this.position,
-    this.event,
+    Key? key,
+    required this.position,
+    required this.event,
     this.buildCard,
   }) : super(key: key);
   final EventPosition position;
   final Event<T> event;
-  final Widget Function(Event<T> event, bool isPast) buildCard;
+  final Widget Function(Event<T> event, bool isPast)? buildCard;
 
   @override
   _EventCardState<T> createState() => _EventCardState();
 }
 
 class _EventCardState<T> extends State<EventCard<T>> {
-  Timer _timer;
+  late Timer _timer;
   final ValueNotifier<DateTime> _now = ValueNotifier(DateTime.now());
 
   @override
@@ -55,14 +55,27 @@ class _EventCardState<T> extends State<EventCard<T>> {
             decoration: widget.buildCard == null
                 ? BoxDecoration(
                     borderRadius: BorderRadius.circular(4),
-                    color: Colors.blue.withOpacity(0.3),
+                    color: _isPast
+                        ? Colors.grey.withOpacity(0.3)
+                        : Colors.blue.withOpacity(0.3),
                   )
                 : null,
             height: widget.position.height,
             width: widget.position.width,
             child: widget.buildCard != null
-                ? widget.buildCard(widget.event, _isPast)
-                : const SizedBox.shrink(),
+                ? widget.buildCard!(widget.event, _isPast)
+                : Column(
+                    children: [
+                      Text(
+                        '${widget.event.start.format('hh:mm')} - ${widget.event.end.format('hh:mm')}',
+                        style: const TextStyle(fontSize: 12),
+                      ),
+                      Text(
+                        widget.event.date.format('yy:MM:dd'),
+                        style: const TextStyle(fontSize: 12),
+                      )
+                    ],
+                  ),
           ),
         );
       },

@@ -82,47 +82,47 @@ class _MyHomePageState extends State<MyHomePage> {
                 print('On change date: ${current[0]}');
                 print('On change direction: $dir');
                 print('On change columns $current');
-                setState(() {
-                  _month = current[0];
-                });
+                // setState(() {
+                //   _month = current[0];
+                // });
               },
-              initialDate: _initDate,
+              // initialDate: _initDate,
               dayStart: 8,
               dayEnd: 24,
-              events: eventsList,
               visibleRange: visibleRange,
-              buildCard: (event, isPast) {
-                return GestureDetector(
-                  onTap: () {
-                    print(event.payload.data.title);
-                  },
-                  child: Container(
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.black),
-                      borderRadius: BorderRadius.circular(4),
-                      color: isPast
-                          ? Colors.grey[400]
-                          : Colors.blue[200].withOpacity(0.5),
-                    ),
-                    child: Column(
-                      children: [
-                        Text(
-                          '${event.payload.data.title}',
-                          style: TextStyle(fontSize: 10),
-                        ),
-                        Text(
-                          '${event.start.format('hh:mm')}\n${event.end.format('hh:mm')}',
-                          style: TextStyle(fontSize: 10),
-                        ),
-                        Text(
-                          'isPast: $isPast',
-                          style: TextStyle(fontSize: 10),
-                        )
-                      ],
-                    ),
-                  ),
-                );
-              },
+              events: eventsList,
+              // buildCard: (event, isPast) {
+              //   return GestureDetector(
+              //     onTap: () {
+              //       print(event.payload.data.title);
+              //     },
+              //     child: Container(
+              //       decoration: BoxDecoration(
+              //         border: Border.all(color: Colors.black),
+              //         borderRadius: BorderRadius.circular(4),
+              //         color: isPast
+              //             ? Colors.grey[400]
+              //             : Colors.blue[200].withOpacity(0.5),
+              //       ),
+              //       child: Column(
+              //         children: [
+              //           Text(
+              //             '${event.payload.data.title}',
+              //             style: TextStyle(fontSize: 10),
+              //           ),
+              //           Text(
+              //             '${event.start.format('hh:mm')}\n${event.end.format('hh:mm')}',
+              //             style: TextStyle(fontSize: 10),
+              //           ),
+              //           Text(
+              //             'isPast: $isPast',
+              //             style: TextStyle(fontSize: 10),
+              //           )
+              //         ],
+              //       ),
+              //     ),
+              //   );
+              // },
             ),
           ),
         ],

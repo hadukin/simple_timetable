@@ -12,7 +12,7 @@ Future<Map<DateTime, List<List<Event<T>>>>> getGroups<T>(
     if (!groups.containsKey(item.date.startOfDay)) {
       groups[item.date.startOfDay] = [item];
     } else {
-      groups[item.date.startOfDay] = [item, ...groups[item.date.startOfDay]];
+      groups[item.date.startOfDay] = [item, ...groups[item.date.startOfDay]!];
     }
   }
 
@@ -30,8 +30,8 @@ List<List<Event<T>>> _getSortByOverlap<T>(List<Event<T>> data) {
   final List<bool> isOverlap = [];
   final List<bool> isOverlapCount = [];
   final List<List<Event<T>>> groupedEvents = [];
-  final Map<int, List<Event<T>>> temp = {};
-  int enterGroup;
+  final Map<int?, List<Event<T>>> temp = {};
+  int? enterGroup;
 
   for (var i = 0; i < data.length; i++) {
     final item = data[i];
