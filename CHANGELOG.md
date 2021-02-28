@@ -1,4 +1,10 @@
+# 0.0.12
+
+## Fix
+
 # 0.0.11
+
+- null onChange method
 
 ## Feat
 
