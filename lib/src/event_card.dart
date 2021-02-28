@@ -73,7 +73,11 @@ class _EventCardState<T> extends State<EventCard<T>> {
                       Text(
                         widget.event.date.format('yy:MM:dd'),
                         style: const TextStyle(fontSize: 12),
-                      )
+                      ),
+                      Text(
+                        'is past: $_isPast',
+                        style: const TextStyle(fontSize: 12),
+                      ),
                     ],
                   ),
           ),
