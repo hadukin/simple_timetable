@@ -86,18 +86,7 @@ class SimpleTimetableState<T> extends State<SimpleTimetable<T>> {
       });
     }
 
-    if (widget.events.isNotEmpty) {
-      getGroups<T>(widget.events).then(
-        (value) {
-          setState(() {
-            _groups = value;
-          });
-        },
-      ).catchError((dynamic e) {
-        // ignore: avoid_print
-        print('GET GROUPS ERROR\n$e');
-      });
-    }
+    _createGroups();
   }
 
   @override
@@ -120,7 +109,17 @@ class SimpleTimetableState<T> extends State<SimpleTimetable<T>> {
         start: widget.initialDate ?? DateTime.now(),
         dir: TimetableDirection.none,
       );
+      _createGroups();
     });
+  }
+
+  Future<void> _createGroups() async {
+    if (widget.events.isNotEmpty) {
+      final data = await getGroups<T>(widget.events);
+      setState(() {
+        _groups = data;
+      });
+    }
   }
 
   void _timelinePosition() {
@@ -144,7 +143,9 @@ class SimpleTimetableState<T> extends State<SimpleTimetable<T>> {
     );
     _columns = _timetableHelper.getTable(start);
     _timeLine = _timetableHelper.getTimeLineForDay(start);
-    widget.onChange(_columns.keys.toList(), dir);
+    if (widget.onChange != null) {
+      widget.onChange(_columns.keys.toList(), dir);
+    }
     setState(() {});
   }
 
