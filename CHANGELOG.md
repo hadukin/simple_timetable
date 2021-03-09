@@ -1,3 +1,9 @@
+# 1.0.1
+
+## Fix
+
+- Update dependencies
+
 # 1.0.0
 
 ## Feat

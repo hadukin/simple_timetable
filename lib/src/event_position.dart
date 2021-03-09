@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:dart_date/dart_date.dart';
 
 class EventPosition {
