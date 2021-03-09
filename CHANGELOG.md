@@ -1,3 +1,9 @@
+# 1.0.0
+
+## Feat
+
+- Update version
+
 # 0.0.13
 
 ## Feat
