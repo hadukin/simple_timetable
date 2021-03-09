@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
+// import 'package:intl/intl.dart';
 
 class TimeLine extends StatelessWidget {
   const TimeLine({
-    Key key,
-    @required this.offsetTop,
-    @required this.timelineColumnWidth,
-    @required this.horizontalIndent,
+    Key? key,
+    required this.offsetTop,
+    required this.timelineColumnWidth,
+    required this.horizontalIndent,
     this.color,
   }) : super(key: key);
   final double offsetTop;
   final double timelineColumnWidth;
   final double horizontalIndent;
-  final Color color;
+  final Color? color;
 
   @override
   Widget build(BuildContext context) {
@@ -20,11 +21,11 @@ class TimeLine extends StatelessWidget {
 
     // TODO: create current time
     // String _pattern = 'H:mm';
-    // String _time = DateFormat(_pattern).format(DateTime.now());
+    // final String _time = DateFormat(_pattern).format(DateTime.now());
 
     return Positioned(
       right: 0,
-      top: offsetTop,
+      top: offsetTop - 4,
       child: Row(
         children: [
           // TODO: create current time

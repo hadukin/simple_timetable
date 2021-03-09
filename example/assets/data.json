@@ -1,103 +1,16 @@
 {
   "events": [
     {
-      "startDate": "2021-02-27T00:00:00Z",
-      "data": {
-        "eventDate": "2021-02-27T00:00:00Z",
-        "eventStart": "2021-02-27T08:00:00Z",
-        "eventEnd": "2021-02-27T09:00:00Z",
-        "title": "Event 1"
-      }
+      "eventDate": "2021-03-09T00:00:00Z",
+      "eventStart": "2021-03-09T10:00:00Z",
+      "eventEnd": "2021-03-09T11:30:00Z",
+      "title": "Event 3"
     },
     {
-      "startDate": "2021-02-27T00:00:00Z",
-      "data": {
-        "eventDate": "2021-02-27T00:00:00Z",
-        "eventStart": "2021-02-27T08:00:00Z",
-        "eventEnd": "2021-02-27T09:45:00Z",
-        "title": "Event 2"
-      }
-    },
-    {
-      "startDate": "2021-02-27T00:00:00Z",
-      "data": {
-        "eventDate": "2021-02-27T00:00:00Z",
-        "eventStart": "2021-02-27T10:00:00Z",
-        "eventEnd": "2021-02-27T10:45:00Z",
-        "title": "Event 3"
-      }
-    },
-    {
-      "startDate": "2021-02-27T00:00:00Z",
-      "data": {
-        "eventDate": "2021-02-27T00:00:00Z",
-        "eventStart": "2021-02-27T11:00:00Z",
-        "eventEnd": "2021-02-27T11:45:00Z",
-        "title": "Event 4"
-      }
-    },
-    {
-      "startDate": "2021-02-27T00:00:00Z",
-      "data": {
-        "eventDate": "2021-02-27T00:00:00Z",
-        "eventStart": "2021-02-27T10:00:00Z",
-        "eventEnd": "2021-02-27T10:45:00Z",
-        "title": "Event 5"
-      }
-    },
-    {
-      "startDate": "2021-02-27T00:00:00Z",
-      "data": {
-        "eventDate": "2021-02-27T00:00:00Z",
-        "eventStart": "2021-02-27T13:00:00Z",
-        "eventEnd": "2021-02-27T13:45:00Z",
-        "title": "Event 6"
-      }
-    },
-    {
-      "startDate": "2021-02-27T00:00:00Z",
-      "data": {
-        "eventDate": "2021-02-27T00:00:00Z",
-        "eventStart": "2021-02-27T15:30:00Z",
-        "eventEnd": "2021-02-27T16:15:00Z",
-        "title": "Event 7"
-      }
-    },
-    {
-      "startDate": "2021-02-28T00:00:00Z",
-      "data": {
-        "eventDate": "2021-02-28T00:00:00Z",
-        "eventStart": "2021-02-28T08:00:00Z",
-        "eventEnd": "2021-02-28T09:00:00Z",
-        "title": "Event 8"
-      }
-    },
-    {
-      "startDate": "2021-02-28T00:00:00Z",
-      "data": {
-        "eventDate": "2021-02-28T00:00:00Z",
-        "eventStart": "2021-02-28T09:15:00Z",
-        "eventEnd": "2021-02-28T10:00:00Z",
-        "title": "Event 9"
-      }
-    },
-    {
-      "startDate": "2021-02-28T00:00:00Z",
-      "data": {
-        "eventDate": "2021-02-28T00:00:00Z",
-        "eventStart": "2021-02-28T09:00:00Z",
-        "eventEnd": "2021-02-28T09:45:00Z",
-        "title": "Event 10"
-      }
-    },
-    {
-      "startDate": "2021-02-28T00:00:00Z",
-      "data": {
-        "eventDate": "2021-02-28T00:00:00Z",
-        "eventStart": "2021-02-28T09:00:00Z",
-        "eventEnd": "2021-02-28T09:45:00Z",
-        "title": "Event 11"
-      }
+      "eventDate": "2021-03-09T00:00:00Z",
+      "eventStart": "2021-03-09T15:00:00Z",
+      "eventEnd": "2021-03-09T16:30:00Z",
+      "title": "Event 3"
     }
   ]
 }

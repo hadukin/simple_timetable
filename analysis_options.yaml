@@ -4,3 +4,7 @@ analyzer:
   strong-mode:
     implicit-casts: false
     implicit-dynamic: false
+
+linter:
+  rules:
+    field_initialized_in_parameter_and_initializer: false

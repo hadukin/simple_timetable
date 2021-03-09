@@ -8,21 +8,21 @@ class EventPosition {
   final double left;
 
   EventPosition({
-    @required this.height,
-    @required this.top,
-    @required this.left,
-    @required this.width,
+    required this.height,
+    required this.top,
+    required this.left,
+    required this.width,
   });
 }
 
 EventPosition eventPosition({
-  @required DateTime start,
-  @required DateTime end,
-  @required double cellHeight,
-  @required int dayStartFrom,
-  @required int left,
-  @required int count,
-  @required double cellWidth,
+  required DateTime start,
+  required DateTime end,
+  required double cellHeight,
+  required int dayStartFrom,
+  required int left,
+  required int count,
+  required double cellWidth,
   int indent = 6,
 }) {
   final double _t = cellHeight / 60;

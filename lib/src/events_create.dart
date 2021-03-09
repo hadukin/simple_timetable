@@ -4,13 +4,13 @@ import 'package:simple_timetable/src/event_card.dart';
 import 'package:simple_timetable/src/event_position.dart';
 
 List<Widget> eventsCreate<T>({
-  List<List<Event<T>>> events,
-  @required int dayStartFrom,
-  @required double cellWidth,
-  @required double cellHeight,
-  @required Widget Function(Event<T> event, bool isPast) buildCard,
+  required List<List<Event<T>>> events,
+  required int dayStartFrom,
+  required double cellWidth,
+  required double cellHeight,
+  required Widget Function(Event<T> event, bool isPast)? buildCard,
 }) {
-  List<Widget> listWidgets = [];
+  final List<Widget> listWidgets = [];
   for (final item in events) {
     for (int i = 0; i < item.length; i++) {
       final EventPosition position = eventPosition(

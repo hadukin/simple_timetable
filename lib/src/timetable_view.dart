@@ -11,89 +11,59 @@ import 'package:intl/intl.dart';
 
 class SimpleTimetable<T> extends StatefulWidget {
   const SimpleTimetable({
-    Key key,
-    @required this.initialDate,
-    @required this.events,
+    required this.events,
+    this.initialDate,
     this.cellHeight = 60,
     this.timelineColumnWidth = 50,
-    this.horizontalIndent = 24,
+    this.horizontalIndent = 0,
     this.buildHeader,
     this.buildCell,
     this.buildCard,
     this.onChange,
-    this.dayStart = 8,
-    this.dayEnd = 20,
+    this.visibleTimeline = true,
+    int this.dayStart = 8,
+    int this.dayEnd = 24,
     this.visibleRange = 7,
     this.colorTimeline,
-    this.prevBotton,
-    this.nextBotton,
-  })  : assert(initialDate != null),
-        assert(dayStart < dayEnd),
+    this.prevButton,
+    this.nextButton,
+  })  : assert(dayStart < dayEnd),
         assert(dayEnd > dayStart),
         assert(dayStart >= 0 && dayStart <= 23),
-        assert(dayEnd > 0 && dayEnd <= 24),
-        super(key: key);
-  final Color colorTimeline;
+        assert(dayEnd > 0 && dayEnd <= 24);
+
+  final bool visibleTimeline;
   final List<Event<T>> events;
-  final double cellHeight;
-  final double timelineColumnWidth;
-  final double horizontalIndent;
-  final int visibleRange;
-  final int dayStart;
-  final int dayEnd;
-  final DateTime initialDate;
-  final Function(
+  final DateTime? initialDate;
+  final Color? colorTimeline;
+  final double? cellHeight;
+  final double? timelineColumnWidth;
+  final double? horizontalIndent;
+  final int? visibleRange;
+  final int? dayStart;
+  final int? dayEnd;
+  final void Function(
     List<DateTime> currentColumns,
-    TimetableDirection dir,
-  ) onChange;
-  final Widget Function(Event<T> event, bool isPast) buildCard;
-  final Widget Function(bool isFirstColumn, bool isLastColumn) buildCell;
-  final Widget Function(DateTime date, bool isToday) buildHeader;
-  final Widget prevBotton;
-  final Widget nextBotton;
+    TimetableDirection? dir,
+  )? onChange;
+  final Widget Function(Event<T> event, bool isPast)? buildCard;
+  final Widget Function(bool isFirstColumn, bool isLastColumn)? buildCell;
+  final Widget Function(DateTime date, bool isToday)? buildHeader;
+  final Widget? prevButton;
+  final Widget? nextButton;
 
   @override
   SimpleTimetableState<T> createState() => SimpleTimetableState();
 }
 
 class SimpleTimetableState<T> extends State<SimpleTimetable<T>> {
-  Timer _timer;
-  double _dragDirection = 0;
+  late Timer _timer;
+  double? _dragDirection = 0;
   List<DateTime> _timeLine = [];
-  TimetableHelper _timetableHelper;
+  late TimetableHelper _timetableHelper;
   Map<DateTime, List<DateTime>> _columns = {};
   Map<DateTime, List<List<Event<T>>>> _groups = {};
   final ValueNotifier<double> _timeLinePosition = ValueNotifier(0.0);
-
-  @override
-  void didUpdateWidget(SimpleTimetable<T> oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (oldWidget.visibleRange != widget.visibleRange) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        _createTable(
-          start: _columns.keys.first ?? DateTime.now(),
-          dir: TimetableDirection.none,
-        );
-      });
-    }
-
-    if (oldWidget.initialDate.startOfDay != widget.initialDate.startOfDay) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        _createTable(
-          start: widget.initialDate ?? DateTime.now(),
-          dir: TimetableDirection.none,
-        );
-      });
-    }
-
-    _createGroups();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    _timer.cancel();
-  }
 
   @override
   void initState() {
@@ -104,13 +74,46 @@ class SimpleTimetableState<T> extends State<SimpleTimetable<T>> {
       _timelinePosition();
     });
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
       _createTable(
         start: widget.initialDate ?? DateTime.now(),
         dir: TimetableDirection.none,
       );
       _createGroups();
     });
+  }
+
+  @override
+  void didUpdateWidget(SimpleTimetable<T> oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    if (oldWidget.visibleRange != widget.visibleRange) {
+      WidgetsBinding.instance!.addPostFrameCallback((_) {
+        _createTable(
+          start: _columns.keys.first,
+          dir: TimetableDirection.none,
+        );
+      });
+    }
+
+    if (widget.initialDate != null) {
+      if (oldWidget.initialDate!.startOfDay != widget.initialDate!.startOfDay) {
+        WidgetsBinding.instance!.addPostFrameCallback((_) {
+          _createTable(
+            start: widget.initialDate,
+            dir: TimetableDirection.none,
+          );
+        });
+      }
+    }
+
+    _createGroups();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _timer.cancel();
   }
 
   Future<void> _createGroups() async {
@@ -123,8 +126,8 @@ class SimpleTimetableState<T> extends State<SimpleTimetable<T>> {
   }
 
   void _timelinePosition() {
-    final _t = widget.cellHeight / 60;
-    final _todayStart = Date.today.startOfDay.addHours(widget.dayStart);
+    final _t = widget.cellHeight! / 60;
+    final _todayStart = Date.today.startOfDay.addHours(widget.dayStart!);
     final _now = DateTime.now();
     var _diff = _todayStart.differenceInMinutes(_now).abs();
     if (_todayStart.differenceInMinutes(_now) < 0) {
@@ -135,7 +138,7 @@ class SimpleTimetableState<T> extends State<SimpleTimetable<T>> {
     _timeLinePosition.value = _diff * _t;
   }
 
-  void _createTable({DateTime start, TimetableDirection dir}) {
+  void _createTable({DateTime? start, TimetableDirection? dir}) {
     _timetableHelper = TimetableHelper(
       dayStartTime: widget.dayStart,
       dayEndTime: widget.dayEnd,
@@ -143,17 +146,18 @@ class SimpleTimetableState<T> extends State<SimpleTimetable<T>> {
     );
     _columns = _timetableHelper.getTable(start);
     _timeLine = _timetableHelper.getTimeLineForDay(start);
+
     if (widget.onChange != null) {
-      widget.onChange(_columns.keys.toList(), dir);
+      widget.onChange!(_columns.keys.toList(), dir);
     }
     setState(() {});
   }
 
-  bool _getLastColumn(DateTime date) => _columns?.keys?.last == date;
+  bool _getLastColumn(DateTime date) => _columns.keys.last == date;
 
-  bool _getFirstColumn(DateTime date) => _columns?.keys?.first == date;
+  bool _getFirstColumn(DateTime date) => _columns.keys.first == date;
 
-  BoxDecoration _cellDefaultStyle({bool isFirst, bool isLast}) => BoxDecoration(
+  BoxDecoration _cellDefaultStyle(bool isFirst, bool isLast) => BoxDecoration(
         border: Border(
           top: const BorderSide(color: Color(0xffDEE2E8)),
           right: isLast
@@ -173,14 +177,11 @@ class SimpleTimetableState<T> extends State<SimpleTimetable<T>> {
             return Container(
               decoration: widget.buildCell != null
                   ? null
-                  : _cellDefaultStyle(
-                      isFirst: _isFirstColumn,
-                      isLast: _isLastColumn,
-                    ),
+                  : _cellDefaultStyle(_isFirstColumn, _isLastColumn),
               height: widget.cellHeight,
               child: widget.buildCell == null
                   ? null
-                  : widget.buildCell(_isFirstColumn, _isLastColumn),
+                  : widget.buildCell!(_isFirstColumn, _isLastColumn),
             );
           },
         ).toList()
@@ -214,7 +215,7 @@ class SimpleTimetableState<T> extends State<SimpleTimetable<T>> {
           dir: TimetableDirection.backward,
         );
       },
-      icon: widget.prevBotton ??
+      icon: widget.prevButton ??
           const Icon(
             Icons.arrow_back_ios,
             color: Colors.black54,
@@ -230,7 +231,7 @@ class SimpleTimetableState<T> extends State<SimpleTimetable<T>> {
           dir: TimetableDirection.forward,
         );
       },
-      icon: widget.nextBotton ??
+      icon: widget.nextButton ??
           const Icon(
             Icons.arrow_forward_ios,
             color: Colors.black54,
@@ -242,12 +243,12 @@ class SimpleTimetableState<T> extends State<SimpleTimetable<T>> {
     return LayoutBuilder(
       builder: (context, constraints) {
         final cellWidth = constraints.constrainWidth();
-        List<Widget> eventWidgets;
+        List<Widget>? eventWidgets;
         if (_groups.keys.contains(column.key)) {
           eventWidgets = eventsCreate<T>(
-            dayStartFrom: widget.dayStart,
-            events: _groups[column.key],
-            cellHeight: widget.cellHeight,
+            dayStartFrom: widget.dayStart!,
+            events: _groups[column.key]!,
+            cellHeight: widget.cellHeight!,
             cellWidth: cellWidth,
             buildCard: widget.buildCard,
           );
@@ -269,45 +270,45 @@ class SimpleTimetableState<T> extends State<SimpleTimetable<T>> {
       children: [
         Padding(
           padding: EdgeInsets.only(
-            left: widget.horizontalIndent,
-            right: widget.horizontalIndent,
+            left: widget.horizontalIndent!,
+            right: widget.horizontalIndent!,
           ),
           child: Row(
             children: [
               SizedBox(
                 width: widget.timelineColumnWidth,
-                child: _prev(_columns?.keys?.first),
+                child: _prev(_columns.keys.first),
               ),
-              ..._columns?.keys?.map(
+              ..._columns.keys.map(
                 (day) {
                   final bool _isToday = day == Date.today.startOfDay;
                   return Expanded(
                     child: SizedBox(
                       height: 60,
                       child: Align(
-                          child: _columns?.keys?.last == day
+                          child: _columns.keys.last == day
                               ? Stack(
                                   fit: StackFit.expand,
                                   children: [
                                     if (widget.buildHeader != null)
-                                      widget.buildHeader(day, _isToday)
+                                      widget.buildHeader!(day, _isToday)
                                     else
                                       _cellHeader(day, _isToday),
                                     Positioned(
                                       top: 0,
                                       right: 0,
                                       bottom: 0,
-                                      child: _next(_columns?.keys?.first),
+                                      child: _next(_columns.keys.first),
                                     )
                                   ],
                                 )
                               : widget.buildHeader != null
-                                  ? widget.buildHeader(day, _isToday)
+                                  ? widget.buildHeader!(day, _isToday)
                                   : _cellHeader(day, _isToday)),
                     ),
                   );
                 },
-              )?.toList(),
+              ).toList(),
             ],
           ),
         ),
@@ -317,11 +318,11 @@ class SimpleTimetableState<T> extends State<SimpleTimetable<T>> {
               _dragDirection = details.primaryDelta;
             },
             onHorizontalDragEnd: (DragEndDetails details) {
-              if (_dragDirection < 0) {
-                final DateTime _date = _columns?.keys?.first?.addDays(1);
+              if (_dragDirection! < 0) {
+                final DateTime _date = _columns.keys.first.addDays(1);
                 _createTable(start: _date, dir: TimetableDirection.forward);
               } else {
-                final DateTime _date = _columns?.keys?.first?.subDays(1);
+                final DateTime _date = _columns.keys.first.subDays(1);
                 _createTable(start: _date, dir: TimetableDirection.backward);
               }
             },
@@ -329,11 +330,10 @@ class SimpleTimetableState<T> extends State<SimpleTimetable<T>> {
               child: Padding(
                 padding: EdgeInsets.only(
                   top: 8,
-                  left: widget.horizontalIndent,
-                  right: widget.horizontalIndent,
+                  left: widget.horizontalIndent!,
+                  right: widget.horizontalIndent!,
                 ),
                 child: Stack(
-                  overflow: Overflow.visible,
                   children: [
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -342,12 +342,12 @@ class SimpleTimetableState<T> extends State<SimpleTimetable<T>> {
                         SizedBox(
                           width: widget.timelineColumnWidth,
                           child: Stack(
-                            overflow: Overflow.visible,
+                            clipBehavior: Clip.antiAlias,
                             children: [
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.stretch,
                                 children: [
-                                  ..._timeLine?.map(
+                                  ..._timeLine.map(
                                     (item) {
                                       return Container(
                                         alignment: Alignment.topRight,
@@ -368,13 +368,13 @@ class SimpleTimetableState<T> extends State<SimpleTimetable<T>> {
                                         ),
                                       );
                                     },
-                                  )?.toList()
+                                  ).toList()
                                 ],
                               ),
                             ],
                           ),
                         ),
-                        ..._columns?.entries?.map(
+                        ..._columns.entries.map(
                           (column) {
                             return Expanded(
                               child: Column(
@@ -385,22 +385,23 @@ class SimpleTimetableState<T> extends State<SimpleTimetable<T>> {
                               ),
                             );
                           },
-                        )?.toList()
+                        ).toList()
                       ],
                     ),
-                    if (_timeLinePosition.value != 0.0)
+                    if (_timeLinePosition.value != 0.0 &&
+                        widget.visibleTimeline)
                       ValueListenableBuilder<double>(
                         valueListenable: _timeLinePosition,
                         builder: (
                           BuildContext context,
                           double value,
-                          Widget child,
+                          Widget? child,
                         ) =>
                             TimeLine(
                           color: widget.colorTimeline,
                           offsetTop: _timeLinePosition.value,
-                          timelineColumnWidth: widget.timelineColumnWidth,
-                          horizontalIndent: widget.horizontalIndent,
+                          timelineColumnWidth: widget.timelineColumnWidth!,
+                          horizontalIndent: widget.horizontalIndent!,
                         ),
                       )
                   ],
