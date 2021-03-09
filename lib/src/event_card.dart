@@ -1,10 +1,8 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:simple_timetable/src/event.dart';
 import 'package:simple_timetable/src/event_position.dart';
-import 'package:dart_date/dart_date.dart';
 
 class EventCard<T> extends StatefulWidget {
   const EventCard({
@@ -46,7 +44,8 @@ class _EventCardState<T> extends State<EventCard<T>> {
       valueListenable: _now,
       builder: (context, v, child) {
         final _current = DateTime(v.year, v.month, v.day, v.hour, v.minute);
-        final bool _isPast = _current > widget.event.end;
+        final bool _isPast = _current.isAfter(widget.event.end);
+
         return Positioned(
           top: widget.position.top,
           left: widget.position.left,
@@ -67,16 +66,16 @@ class _EventCardState<T> extends State<EventCard<T>> {
                     child: Column(
                       children: [
                         Text(
-                          '${widget.event.start.format('hh:mm')} - ${widget.event.end.format('hh:mm')}',
-                          style: const TextStyle(fontSize: 12),
+                          '${widget.event.start.hour}:${widget.event.start.minute} - ${widget.event.end.hour}:${widget.event.end.minute}',
+                          style: const TextStyle(fontSize: 10),
                         ),
                         Text(
-                          widget.event.date.format('yy:MM:dd'),
-                          style: const TextStyle(fontSize: 12),
+                          '${widget.event.date.day}-${widget.event.date.month}-${widget.event.date.year}',
+                          style: const TextStyle(fontSize: 10),
                         ),
                         Text(
                           'is past: $_isPast',
-                          style: const TextStyle(fontSize: 12),
+                          style: const TextStyle(fontSize: 10),
                         ),
                       ],
                     ),

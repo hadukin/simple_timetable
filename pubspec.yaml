@@ -6,16 +6,15 @@ repository: https://github.com/hadukin/simple_timetable
 
 environment:
   sdk: ">=2.12.0 <3.0.0"
-  flutter: ">=1.17.0 <2.0.0"
+  flutter: ">=1.17.0"
 
 dependencies:
-  dart_date: ^1.0.9
   flutter:
     sdk: flutter
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  lint: ^1.5.1
+  lint: ^1.5.3
 
 flutter:

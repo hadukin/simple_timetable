@@ -1,5 +1,3 @@
-import 'package:dart_date/dart_date.dart';
-
 class EventPosition {
   final double height;
   final double width;
@@ -25,7 +23,9 @@ EventPosition eventPosition({
   int indent = 6,
 }) {
   final double _t = cellHeight / 60;
-  final double _height = start.differenceInMinutes(end).abs() * _t;
+
+  final double _height = start.difference(end).inMinutes.abs() * _t;
+
   final double _width = (cellWidth.toDouble() / count) - indent;
   final double _top =
       (((dayStartFrom - start.hour).abs()) * cellHeight) + start.minute;

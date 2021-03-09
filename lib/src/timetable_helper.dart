@@ -1,4 +1,4 @@
-import 'package:dart_date/dart_date.dart';
+import 'package:simple_timetable/src/extensions.dart';
 
 class TimetableHelper {
   final int? dayStartTime;
@@ -13,12 +13,14 @@ class TimetableHelper {
 
   List<DateTime> _getTimetable({required DateTime start}) {
     final DateTime _now = start;
+
     return List.generate(
-        visibleRange!, (index) => _now + Duration(days: index));
+        visibleRange!, (index) => _now.add(Duration(days: index)));
   }
 
   Map<DateTime, List<DateTime>> getTable([DateTime? start]) {
-    final DateTime _now = start ?? Date.startOfToday;
+    final DateTime _now = start ?? DateTime.now().startOfDay;
+
     final List<DateTime> timetable = _getTimetable(start: _now.startOfDay);
     final Map<DateTime, List<DateTime>> table = {};
 
@@ -30,9 +32,10 @@ class TimetableHelper {
   }
 
   List<DateTime> getTimeLineForDay([DateTime? day]) {
-    final DateTime _day = day ?? Date.startOfToday;
+    final DateTime _day = day ?? DateTime.now().startOfDay;
+
     return List.generate(dayEndTime! - dayStartTime!, (index) {
-      return _day.setHour(index + dayStartTime!);
+      return _day.startOfDay.addHour(index + dayStartTime!);
     });
   }
 }

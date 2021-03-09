@@ -80,18 +80,16 @@ class _MyHomePageState extends State<MyHomePage> {
             child: Row(
               children: [
                 SizedBox(width: 24),
-                RaisedButton(
-                  color: Colors.blue[300],
+                ElevatedButton(
                   child: Text('Change visible range'),
                   onPressed: () {
                     setState(() {
-                      visibleRange = 3;
+                      visibleRange = visibleRange == 7 ? 3 : 7;
                     });
                   },
                 ),
                 SizedBox(width: 24),
-                RaisedButton(
-                  color: Colors.blue[300],
+                ElevatedButton(
                   child: Text('Change initial date '),
                   onPressed: () {
                     setState(() {
@@ -120,8 +118,8 @@ class _MyHomePageState extends State<MyHomePage> {
               initialDate: _initDate,
               dayStart: 8,
               dayEnd: 24,
-              events: eventsList,
               visibleRange: visibleRange,
+              events: eventsList,
               buildCard: (event, isPast) {
                 return GestureDetector(
                   onTap: () {
@@ -184,7 +182,16 @@ List<Event<TimeTableEvent>> eventsList = [
   Event<TimeTableEvent>(
     id: UniqueKey().toString(),
     start: DateTime.now().startOfDay.add(Duration(hours: 11)),
-    end: DateTime.now().startOfDay.add(Duration(hours: 12, minutes: 15)),
+    end: DateTime.now().startOfDay.add(Duration(hours: 12, minutes: 18)),
+    date: DateTime.now().startOfDay,
+    payload: TimeTableEvent(
+      data: EventPayload(title: 'Event 3'),
+    ),
+  ),
+  Event<TimeTableEvent>(
+    id: UniqueKey().toString(),
+    start: DateTime.now().startOfDay.add(Duration(hours: 15)),
+    end: DateTime.now().startOfDay.add(Duration(hours: 16, minutes: 30)),
     date: DateTime.now().startOfDay,
     payload: TimeTableEvent(
       data: EventPayload(title: 'Event 3'),

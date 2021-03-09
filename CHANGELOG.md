@@ -1,8 +1,8 @@
 # 1.0.1
 
-## Fix
+## Feat
 
-- Update dependencies
+- Remove dependencies
 
 # 1.0.0
 

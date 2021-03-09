@@ -159,6 +159,15 @@ List<Event<TimeTableEvent>> eventsList = [
   ),
   Event<TimeTableEvent>(
     id: UniqueKey().toString(),
+    start: DateTime.now().startOfDay.add(Duration(hours: 15)),
+    end: DateTime.now().startOfDay.add(Duration(hours: 16, minutes: 30)),
+    date: DateTime.now().startOfDay,
+    payload: TimeTableEvent(
+      data: EventPayload(title: 'Event 3'),
+    ),
+  ),
+  Event<TimeTableEvent>(
+    id: UniqueKey().toString(),
     start: DateTime.now().startOfDay.add(
           Duration(
             days: 1,
