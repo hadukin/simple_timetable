@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-
 class Event<T> {
   final String id;
   final DateTime start;
