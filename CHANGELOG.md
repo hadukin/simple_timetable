@@ -1,3 +1,9 @@
+# 0.0.13
+
+## Feat
+
+- Add null safety
+
 # 0.0.12
 
 ## Fix

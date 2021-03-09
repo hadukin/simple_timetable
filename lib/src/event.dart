@@ -5,13 +5,13 @@ class Event<T> {
   final DateTime start;
   final DateTime end;
   final DateTime date;
-  final T payload;
+  final T? payload;
 
   Event({
-    @required this.id,
-    @required this.start,
-    @required this.end,
-    @required this.date,
+    required this.id,
+    required this.start,
+    required this.end,
+    required this.date,
     this.payload,
   });
 }
