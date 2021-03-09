@@ -1,3 +1,9 @@
+# 1.0.1
+
+## Feat
+
+- Remove dependencies
+
 # 1.0.0
 
 ## Feat
