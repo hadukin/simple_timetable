@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:example/models/event.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:simple_timetable/simple_timetable.dart';
 import 'package:dart_date/dart_date.dart';
 
@@ -32,6 +35,41 @@ class _MyHomePageState extends State<MyHomePage> {
   DateTime _month = DateTime.now();
   DateTime _initDate = DateTime.now();
   int visibleRange = 7;
+
+  List<Event<TimeTableEvent>> data = [];
+
+  @override
+  void initState() {
+    super.initState();
+    getFileData('assets/data.json');
+  }
+
+  Future<void> getFileData(String path) async {
+    final result = await rootBundle.loadString(path);
+    final dynamic response = json.decode(result);
+
+    for (var item in response['events']) {
+      final start = Date.parse(item['eventStart'] as String);
+      final end = Date.parse(item['eventEnd'] as String);
+      final date = Date.parse(item['eventDate'] as String);
+
+      final event = Event<TimeTableEvent>(
+        id: UniqueKey().toString(),
+        start: start,
+        end: end,
+        date: date,
+        payload: TimeTableEvent(
+          data: EventPayload(title: item['title'] as String),
+        ),
+      );
+
+      data.add(event);
+    }
+
+    setState(() {
+      data = data;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -77,9 +115,9 @@ class _MyHomePageState extends State<MyHomePage> {
                 List<DateTime> current,
                 TimetableDirection dir,
               ) {
-                print('On change date: ${current[0]}');
-                print('On change direction: $dir');
-                print('On change columns $current');
+                // print('On change date: ${current[0]}');
+                // print('On change direction: $dir');
+                // print('On change columns $current');
                 setState(() {
                   _month = current[0];
                 });
@@ -152,6 +190,15 @@ List<Event<TimeTableEvent>> eventsList = [
     id: UniqueKey().toString(),
     start: DateTime.now().startOfDay.add(Duration(hours: 11)),
     end: DateTime.now().startOfDay.add(Duration(hours: 12, minutes: 18)),
+    date: DateTime.now().startOfDay,
+    payload: TimeTableEvent(
+      data: EventPayload(title: 'Event 3'),
+    ),
+  ),
+  Event<TimeTableEvent>(
+    id: UniqueKey().toString(),
+    start: DateTime.now().startOfDay.add(Duration(hours: 15)),
+    end: DateTime.now().startOfDay.add(Duration(hours: 16, minutes: 30)),
     date: DateTime.now().startOfDay,
     payload: TimeTableEvent(
       data: EventPayload(title: 'Event 3'),

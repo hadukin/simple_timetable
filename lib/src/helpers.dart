@@ -1,5 +1,5 @@
 import 'package:simple_timetable/simple_timetable.dart';
-import 'package:dart_date/dart_date.dart';
+import 'package:simple_timetable/src/extensions.dart';
 
 List<Event<T>> _normalizeEvent<T>(List<Event<T>> data) {
   final result = data.map(
@@ -100,12 +100,11 @@ bool _periodOverlaps<T>(Event<T> testPeriod, List<Event<T>> periods) {
   for (var i = 0; i < periods.length; i++) {
     final period = periods[i];
     if (period.id != testPeriod.id) {
-      if (period.start <= testPeriod.start && period.end > testPeriod.start) {
-        return true;
-      }
-      if (period.start >= testPeriod.start && period.start < testPeriod.end) {
-        return true;
-      }
+      final a1 = period.start.compareTo(testPeriod.start) <= 0;
+      final a2 = period.end.compareTo(testPeriod.start) >= 0;
+      final b1 = period.start.compareTo(testPeriod.start) >= 0;
+      final b2 = period.start.compareTo(testPeriod.end) <= 0;
+      if ((a1 && a2) || (b1 && b2)) return true;
     }
   }
   return false;

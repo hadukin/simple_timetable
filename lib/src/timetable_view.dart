@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:dart_date/dart_date.dart';
 import 'package:flutter/material.dart';
 import 'package:simple_timetable/simple_timetable.dart';
 import 'package:simple_timetable/src/event.dart';
@@ -7,7 +6,7 @@ import 'package:simple_timetable/src/events_create.dart';
 import 'package:simple_timetable/src/helpers.dart';
 import 'package:simple_timetable/src/timeline.dart';
 import 'package:simple_timetable/src/timetable_helper.dart';
-import 'package:intl/intl.dart';
+import 'package:simple_timetable/src/extensions.dart';
 
 class SimpleTimetable<T> extends StatefulWidget {
   const SimpleTimetable({
@@ -127,11 +126,13 @@ class SimpleTimetableState<T> extends State<SimpleTimetable<T>> {
 
   void _timelinePosition() {
     final _t = widget.cellHeight! / 60;
-    final _todayStart = Date.today.startOfDay.addHours(widget.dayStart!);
+    final _todayStart = DateTime.now().startOfDay.addHour(widget.dayStart!);
     final _now = DateTime.now();
-    var _diff = _todayStart.differenceInMinutes(_now).abs();
-    if (_todayStart.differenceInMinutes(_now) < 0) {
-      _diff = _todayStart.differenceInMinutes(_now).abs();
+
+    int _diff = _todayStart.difference(_now).inMinutes.abs();
+
+    if (_todayStart.difference(_now).inMinutes < 0) {
+      _diff = _todayStart.difference(_now).inMinutes.abs();
     } else {
       _diff = 0;
     }
@@ -198,7 +199,7 @@ class SimpleTimetableState<T> extends State<SimpleTimetable<T>> {
         ),
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
         child: Text(
-          DateFormat("d").format(day),
+          '${day.day}',
           style: TextStyle(
             color: _isToday ? Colors.white : Colors.black54,
           ),
@@ -211,7 +212,7 @@ class SimpleTimetableState<T> extends State<SimpleTimetable<T>> {
     return IconButton(
       onPressed: () {
         _createTable(
-          start: date.subDays(1),
+          start: date.subDay(1),
           dir: TimetableDirection.backward,
         );
       },
@@ -227,7 +228,7 @@ class SimpleTimetableState<T> extends State<SimpleTimetable<T>> {
     return IconButton(
       onPressed: () {
         _createTable(
-          start: date.addDays(1),
+          start: date.addDay(1),
           dir: TimetableDirection.forward,
         );
       },
@@ -281,7 +282,9 @@ class SimpleTimetableState<T> extends State<SimpleTimetable<T>> {
               ),
               ..._columns.keys.map(
                 (day) {
-                  final bool _isToday = day == Date.today.startOfDay;
+                  // final bool _isToday = day == Date.today.startOfDay;
+                  final bool _isToday = day.isToday;
+
                   return Expanded(
                     child: SizedBox(
                       height: 60,
@@ -319,10 +322,10 @@ class SimpleTimetableState<T> extends State<SimpleTimetable<T>> {
             },
             onHorizontalDragEnd: (DragEndDetails details) {
               if (_dragDirection! < 0) {
-                final DateTime _date = _columns.keys.first.addDays(1);
+                final DateTime _date = _columns.keys.first.addDay(1);
                 _createTable(start: _date, dir: TimetableDirection.forward);
               } else {
-                final DateTime _date = _columns.keys.first.subDays(1);
+                final DateTime _date = _columns.keys.first.subDay(1);
                 _createTable(start: _date, dir: TimetableDirection.backward);
               }
             },
@@ -359,7 +362,7 @@ class SimpleTimetableState<T> extends State<SimpleTimetable<T>> {
                                           offset: const Offset(-8.0, -8.0),
                                           child: SizedBox(
                                             child: Text(
-                                              DateFormat("H:00").format(item),
+                                              '${item.hour}:00',
                                               style: const TextStyle(
                                                 color: Colors.black54,
                                               ),
