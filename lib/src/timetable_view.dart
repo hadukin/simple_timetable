@@ -160,10 +160,10 @@ class SimpleTimetableState<T> extends State<SimpleTimetable<T>> {
 
   BoxDecoration _cellDefaultStyle(bool isFirst, bool isLast) => BoxDecoration(
         border: Border(
-          top: const BorderSide(color: Color(0xffDEE2E8)),
+          top: BorderSide(color: Theme.of(context).dividerColor),
           right: isLast
               ? BorderSide.none
-              : const BorderSide(color: Color(0xffDEE2E8)),
+              : BorderSide(color: Theme.of(context).dividerColor),
         ),
       );
 
@@ -198,12 +198,7 @@ class SimpleTimetableState<T> extends State<SimpleTimetable<T>> {
           borderRadius: BorderRadius.circular(20),
         ),
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-        child: Text(
-          '${day.day}',
-          style: TextStyle(
-            color: _isToday ? Colors.white : Colors.black54,
-          ),
-        ),
+        child: Text('${day.day}'),
       ),
     );
   }
@@ -219,7 +214,6 @@ class SimpleTimetableState<T> extends State<SimpleTimetable<T>> {
       icon: widget.prevButton ??
           const Icon(
             Icons.arrow_back_ios,
-            color: Colors.black54,
           ),
     );
   }
@@ -235,7 +229,6 @@ class SimpleTimetableState<T> extends State<SimpleTimetable<T>> {
       icon: widget.nextButton ??
           const Icon(
             Icons.arrow_forward_ios,
-            color: Colors.black54,
           ),
     );
   }
@@ -282,7 +275,6 @@ class SimpleTimetableState<T> extends State<SimpleTimetable<T>> {
               ),
               ..._columns.keys.map(
                 (day) {
-                  // final bool _isToday = day == Date.today.startOfDay;
                   final bool _isToday = day.isToday;
 
                   return Expanded(
@@ -361,12 +353,7 @@ class SimpleTimetableState<T> extends State<SimpleTimetable<T>> {
                                         child: Transform.translate(
                                           offset: const Offset(-8.0, -8.0),
                                           child: SizedBox(
-                                            child: Text(
-                                              '${item.hour}:00',
-                                              style: const TextStyle(
-                                                color: Colors.black54,
-                                              ),
-                                            ),
+                                            child: Text('${item.hour}:00'),
                                           ),
                                         ),
                                       );

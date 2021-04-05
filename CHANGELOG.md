@@ -1,3 +1,9 @@
+# 1.0.2
+
+## Feat
+
+- Theme color
+
 # 1.0.1
 
 ## Feat
