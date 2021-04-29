@@ -116,12 +116,10 @@ class SimpleTimetableState<T> extends State<SimpleTimetable<T>> {
   }
 
   Future<void> _createGroups() async {
-    if (widget.events.isNotEmpty) {
-      final data = await getGroups<T>(widget.events);
-      setState(() {
-        _groups = data;
-      });
-    }
+    final data = await getGroups<T>(widget.events);
+    setState(() {
+      _groups = data;
+    });
   }
 
   void _timelinePosition() {
