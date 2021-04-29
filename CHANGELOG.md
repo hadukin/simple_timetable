@@ -1,3 +1,9 @@
+# 1.0.3
+
+## Fix
+
+- No refreshing empty list
+
 # 1.0.2
 
 ## Feat
